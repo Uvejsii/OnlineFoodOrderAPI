@@ -1,3 +1,84 @@
 @url = http://localhost:5071
 
+// FOOD ENDPOINTS
 GET {{url}}/getAllFoodProducts
+
+###
+
+GET {{url}}/food/4
+
+###
+
+POST {{url}}/postFood
+Content-Type: application/json
+
+{
+    "ImageUrl": "testPostFoodUrl",
+    "Name": "testPostFoodName",
+    "Description": "testPostFoodDesc",
+    "Price": 2.30,
+    "Rating": 3.7,
+    "Category": "testPostFoodCategory",
+    "Quantity": 1
+}
+
+###
+
+PUT {{url}}/putFood/6
+Content-Type: application/json
+
+{
+    "ImageUrl": "testPUTFoodUrl",
+    "Name": "testPUTFoodName",
+    "Description": "testPUTFoodDesc",
+    "Price": 1.23,
+    "Rating": 1.2,
+    "Category": "testPUTFoodCategory",
+    "Quantity": 2
+}
+###
+
+DELETE {{url}}/deleteFood/6
+
+###
+
+// DRINK ENDPOINTS
+GET {{url}}/getAllDrinkProducts
+
+###
+
+GET {{url}}/drink/1
+
+###
+
+POST {{url}}/postDrink
+Content-Type: application/json
+
+{
+    "ImageUrl": "testPostDrinkUrl",
+    "Name": "testPostDrinkName",
+    "Description": "testPostDrinkDesc",
+    "Price": 1.50,
+    "Rating": 4.3,
+    "Category": "testPostDrinkCategory",
+    "Quantity": 1
+}
+
+###
+
+PUT {{url}}/putDrink/3
+Content-Type: application/json
+
+{
+    "ImageUrl": "testPUTDrinkUrl",
+    "Name": "testPUTDrinkName",
+    "Description": "testPUTDrinkDesc",
+    "Price": 13.23,
+    "Rating": 3.8,
+    "Category": "testPUTDrinkCategory",
+    "Quantity": 3
+}
+
+###
+
+DELETE {{url}}/deleteDrink/3

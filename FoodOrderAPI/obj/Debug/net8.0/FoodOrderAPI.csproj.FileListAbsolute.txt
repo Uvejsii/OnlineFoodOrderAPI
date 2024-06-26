@@ -159,3 +159,4 @@ C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI\obj\Debug\net8.0\refint\FoodOrderA
 C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI\obj\Debug\net8.0\FoodOrderAPI.pdb
 C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI\obj\Debug\net8.0\FoodOrderAPI.genruntimeconfig.cache
 C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI\obj\Debug\net8.0\ref\FoodOrderAPI.dll
+C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI\obj\Debug\net8.0\FoodOrderAPI.sourcelink.json
