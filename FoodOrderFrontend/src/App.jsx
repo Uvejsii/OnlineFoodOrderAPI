@@ -1,40 +1,33 @@
-import { useDispatch, useSelector } from "react-redux";
-import { fetchFoods } from "./features/products/food/foodSlice";
-import { fetchDrinks } from "./features/products/drink/drinkSlice";
-import "./App.css";
-import { useEffect } from "react";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
+import MainLayout from "../Pages/MainLayout";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
+import AdminPage from "../Pages/AdminPage";
+import FoodDetail from "../Pages/FoodDetail";
+import DrinkDetail from "../Pages/DrinkDetail";
+import NotFound from "../Pages/NotFound";
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<MainLayout />}>
+      <Route index element={<AdminPage />}></Route>
+      <Route path="/food/:id" element={<FoodDetail />}></Route>
+      <Route path="/drink/:id" element={<DrinkDetail />}></Route>
+      <Route path="*" element={<NotFound />}></Route>
+    </Route>
+  )
+);
 
 function App() {
-  const dispatch = useDispatch();
-  const FoodData = useSelector((state) => state.foods);
-  const drinkData = useSelector((state) => state.drinks);
-
-  useEffect(() => {
-    dispatch(fetchFoods());
-    dispatch(fetchDrinks());
-  }, [dispatch]);
-
   return (
-    <>
-      {FoodData.isLoading ? (
-        <h1>Loading...</h1>
-      ) : (
-        <div>
-          <div>
-            <h2>Foods</h2>
-            {FoodData.foods.map((food) => (
-              <p key={food.id}>{food.name}</p>
-            ))}
-          </div>
-          <div>
-            <h2>Drinks</h2>
-            {drinkData.drinks.map((drink) => (
-              <p key={drink.id}>{drink.name}</p>
-            ))}
-          </div>
-        </div>
-      )}
-    </>
+    <div className="App">
+      <RouterProvider router={router} />
+    </div>
   );
 }
 

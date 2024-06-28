@@ -33,7 +33,7 @@ app.MapPost("/postFood", async (ModelsContext context, Food food) => {
     return Results.Ok(await context.Foods.ToListAsync());
 });
 
-app.MapPut("/putFood/{id}", async (ModelsContext context, Food food, int id) => {
+app.MapPut("/editFood/{id}", async (ModelsContext context, Food food, int id) => {
     var foundFood = await context.Foods.FindAsync(id);
 
     if (foundFood is null)
