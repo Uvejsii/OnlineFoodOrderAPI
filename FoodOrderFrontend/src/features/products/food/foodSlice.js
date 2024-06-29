@@ -43,8 +43,17 @@ export const deleteFood = createAsyncThunk(
   }
 );
 
+export const getClickedFood = createAsyncThunk(
+  "getClickedFood",
+  async (foodId) => {
+    const data = await fetch(`http://localhost:5071/food/${foodId}`);
+    return data.json();
+  }
+);
+
 const initialState = {
   foods: [],
+  clickedFood: {},
   isLoading: null,
   error: false,
   selectedFoodId: null,
@@ -118,6 +127,18 @@ export const foodSlice = createSlice({
       state.foods = action.payload;
     });
     builder.addCase(deleteFood.rejected, (state) => {
+      state.error = true;
+    });
+
+    // GET CLICKED FOOD
+    builder.addCase(getClickedFood.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getClickedFood.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.clickedFood = action.payload;
+    });
+    builder.addCase(getClickedFood.rejected, (state) => {
       state.error = true;
     });
   },

@@ -7,6 +7,7 @@ import {
 import MainLayout from "../Pages/MainLayout";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
+import "../src/index.css";
 import AdminPage from "../Pages/AdminPage";
 import FoodDetail from "../Pages/FoodDetail";
 import DrinkDetail from "../Pages/DrinkDetail";
