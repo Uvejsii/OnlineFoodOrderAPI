@@ -1,8 +1,11 @@
-.food-card:hover {
+.food-card:hover,
+.drink-card:hover {
   box-shadow: 0 8px 9px 7px rgba(0, 0, 0, 0.17);
   transition: all 0.3s;
 }
 .food-card img,
+h5,
+.drink-card img,
 h5 {
   cursor: pointer;
 }

@@ -10,7 +10,7 @@ const GoToAdminPageButton = () => {
 
   return (
     <button
-      className="btn btn-success fw-bold d-flex justify-content-center align-items-center gap-2 my-4"
+      className="btn btn-success fw-bold d-flex justify-content-center align-items-center gap-2 mb-2"
       onClick={goToAdminPage}
     >
       Back To Admin Page <ArrowLeftCircleFill />

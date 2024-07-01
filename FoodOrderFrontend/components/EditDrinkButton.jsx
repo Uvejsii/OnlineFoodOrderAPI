@@ -1,19 +1,18 @@
 import { useDispatch } from "react-redux";
-import { setEditFoodData } from "../src/features/products/food/foodSlice";
+import { setEditDrinkData } from "../src/features/products/drink/drinkSlice";
 import { PencilSquare } from "react-bootstrap-icons";
 
-const EditFoodButton = ({ food }) => {
+const EditDrinkButton = ({ drink }) => {
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    dispatch(setEditFoodData(food));
+    dispatch(setEditDrinkData(drink));
   };
-
   return (
     <button
       className="btn btn-warning fw-bold w-50 d-flex align-items-center justify-content-center gap-1"
       data-bs-toggle="modal"
-      data-bs-target="#editModal"
+      data-bs-target="#editDrinkModal"
       onClick={handleClick}
     >
       Edit <PencilSquare />
@@ -21,4 +20,4 @@ const EditFoodButton = ({ food }) => {
   );
 };
 
-export default EditFoodButton;
+export default EditDrinkButton;

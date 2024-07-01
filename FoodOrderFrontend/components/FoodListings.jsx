@@ -19,15 +19,13 @@ const FoodListings = () => {
   };
   return (
     <>
-      <div className="row row-cols-1 row-cols-xl-3 row-cols-lg-3 row-cols-md-2 g-4">
-        {FoodData.isLoading ? (
-          <h1>Loading...</h1>
-        ) : (
-          FoodData.foods.map((food) => (
-            <FoodListing food={food} key={food.id} goToFood={goToFood} />
-          ))
-        )}
-      </div>
+      {FoodData.isLoading ? (
+        <h1>Loading...</h1>
+      ) : (
+        FoodData.foods.map((food) => (
+          <FoodListing key={food.id} food={food} goToFood={goToFood} />
+        ))
+      )}
     </>
   );
 };

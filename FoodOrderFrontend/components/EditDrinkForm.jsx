@@ -1,15 +1,18 @@
 import { useDispatch, useSelector } from "react-redux";
-import { editFood, fetchFoods } from "../src/features/products/food/foodSlice";
 import { useState, useEffect } from "react";
+import {
+  editDrink,
+  fetchDrinks,
+} from "../src/features/products/drink/drinkSlice";
 
-const EditFoodForm = () => {
+const EditDrinkForm = () => {
   const dispatch = useDispatch();
-  const editFoodData = useSelector((state) => state.foods.editFoodData);
-  const [formData, setFormData] = useState(editFoodData || {});
+  const editDrinkData = useSelector((state) => state.drinks.editDrinkData);
+  const [formData, setFormData] = useState(editDrinkData || {});
 
   useEffect(() => {
-    setFormData(editFoodData);
-  }, [editFoodData]);
+    setFormData(editDrinkData);
+  }, [editDrinkData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,23 +21,23 @@ const EditFoodForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(editFood(formData));
-    dispatch(fetchFoods());
+    dispatch(editDrink(formData));
+    dispatch(fetchDrinks());
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <div
         className="modal fade"
-        id="editModal"
-        tabIndex="-2"
-        aria-labelledby="editModalLabel"
+        id="editDrinkModal"
+        tabIndex="-4"
+        aria-labelledby="editDrinkModalLabel"
         aria-hidden="true"
       >
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="col-12 text-warning fw-bold form-container border border-warning rounded-3 bg-warning-subtle p-4">
-              <h2 className="text-center fw-bold">Edit Food</h2>
+              <h2 className="text-center fw-bold">Edit Drink</h2>
               <div className="inputs-container mb-3">
                 <p className="m-0">Image Url</p>
                 <input
@@ -120,4 +123,4 @@ const EditFoodForm = () => {
   );
 };
 
-export default EditFoodForm;
+export default EditDrinkForm;

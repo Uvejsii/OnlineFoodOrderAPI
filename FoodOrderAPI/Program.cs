@@ -85,7 +85,7 @@ app.MapPost("/postDrink", async (ModelsContext context, Drink drink) => {
     return Results.Ok(await context.Drinks.ToListAsync());
 });
 
-app.MapPut("/putDrink/{id}", async (ModelsContext context, Drink drink, int id) => {
+app.MapPut("/editDrink/{id}", async (ModelsContext context, Drink drink, int id) => {
     var foundDrink = await context.Drinks.FindAsync(id);
 
     if (foundDrink is null)

@@ -75,7 +75,6 @@ export const foodSlice = createSlice({
     setEditFoodData: (state, action) => {
       state.editFoodData = action.payload;
       state.selectedFoodId = action.payload.id;
-      console.log(state.selectedFoodId);
     },
   },
   extraReducers: (builder) => {
@@ -96,7 +95,7 @@ export const foodSlice = createSlice({
     });
     builder.addCase(addFood.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.foods.push(action.payload);
+      state.foods = action.payload;
     });
     builder.addCase(addFood.rejected, (state) => {
       state.error = true;

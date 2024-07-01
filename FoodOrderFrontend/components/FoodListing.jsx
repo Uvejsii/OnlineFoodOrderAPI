@@ -1,18 +1,7 @@
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import DeleteFoodButton from "./DeleteFoodButton";
 import EditFoodButton from "./EditFoodButton";
-// import { getClickedFood } from "../src/features/products/food/foodSlice";
 
 const FoodListing = ({ food, goToFood }) => {
-  // const [selectedFood, setSelectedFood] = useState(food);
-  const navigate = useNavigate();
-
-  // const handleEditClick = (foodToEdit) => {
-  //   setSelectedFood(foodToEdit);
-  // };
-  // const dispatch = useDispatch();
-
   const onGoToFood = (foodId) => {
     goToFood(foodId);
   };
