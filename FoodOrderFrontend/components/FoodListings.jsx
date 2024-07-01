@@ -4,28 +4,35 @@ import { useEffect } from "react";
 import FoodListing from "./FoodListing";
 import { useNavigate } from "react-router-dom";
 
-const FoodListings = () => {
+const FoodListings = ({ foods }) => {
   const dispatch = useDispatch();
   const FoodData = useSelector((state) => state.foods);
+  const filter = useSelector((state) => state.filter.currentFilter);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(fetchFoods());
-  }, [dispatch]);
+    if (filter === "Food" || filter === "Filter All") {
+      dispatch(fetchFoods());
+    }
+  }, [dispatch, filter]);
+
+  if (FoodData.isLoading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (filter !== "Food" && filter !== "Filter All") {
+    return null;
+  }
 
   const goToFood = (foodId) => {
     navigate(`/food/${foodId}`);
   };
   return (
     <>
-      {FoodData.isLoading ? (
-        <h1>Loading...</h1>
-      ) : (
-        FoodData.foods.map((food) => (
-          <FoodListing key={food.id} food={food} goToFood={goToFood} />
-        ))
-      )}
+      {foods.map((food) => (
+        <FoodListing key={food.id} food={food} goToFood={goToFood} />
+      ))}
     </>
   );
 };

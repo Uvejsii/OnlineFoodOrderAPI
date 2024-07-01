@@ -4,27 +4,34 @@ import { fetchDrinks } from "../src/features/products/drink/drinkSlice";
 import DrinkListing from "./DrinkListing";
 import { useNavigate } from "react-router-dom";
 
-const DrinkListings = () => {
+const DrinkListings = ({ drinks }) => {
   const dispatch = useDispatch();
   const drinkData = useSelector((state) => state.drinks);
   const navigate = useNavigate();
+  const filter = useSelector((state) => state.filter.currentFilter);
 
   useEffect(() => {
-    dispatch(fetchDrinks());
-  }, [dispatch]);
+    if (filter === "Drink" || filter === "Filter All") {
+      dispatch(fetchDrinks());
+    }
+  }, [dispatch, filter]);
+
+  if (drinkData.isLoading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (filter !== "Drink" && filter !== "Filter All") {
+    return null;
+  }
 
   const goToDrink = (drinkId) => {
     navigate(`/drink/${drinkId}`);
   };
   return (
     <>
-      {drinkData.isLoading ? (
-        <h1>Loading...</h1>
-      ) : (
-        drinkData.drinks.map((drink) => (
-          <DrinkListing key={drink.id} drink={drink} goToDrink={goToDrink} />
-        ))
-      )}
+      {drinks.map((drink) => (
+        <DrinkListing key={drink.id} drink={drink} goToDrink={goToDrink} />
+      ))}
     </>
   );
 };
