@@ -5,7 +5,7 @@ const GoToAdminPageButton = () => {
   const navigate = useNavigate();
 
   const goToAdminPage = () => {
-    navigate("/");
+    navigate("/admin");
   };
 
   return (
@@ -13,7 +13,7 @@ const GoToAdminPageButton = () => {
       className="btn btn-success fw-bold d-flex justify-content-center align-items-center gap-2 mb-2"
       onClick={goToAdminPage}
     >
-      Back To Admin Page <ArrowLeftCircleFill />
+      Admin Page <ArrowLeftCircleFill />
     </button>
   );
 };

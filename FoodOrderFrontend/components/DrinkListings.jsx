@@ -4,7 +4,7 @@ import { fetchDrinks } from "../src/features/products/drink/drinkSlice";
 import DrinkListing from "./DrinkListing";
 import { useNavigate } from "react-router-dom";
 
-const DrinkListings = ({ drinks }) => {
+const DrinkListings = ({ drinks, isHomePage }) => {
   const dispatch = useDispatch();
   const drinkData = useSelector((state) => state.drinks);
   const navigate = useNavigate();
@@ -30,7 +30,12 @@ const DrinkListings = ({ drinks }) => {
   return (
     <>
       {drinks.map((drink) => (
-        <DrinkListing key={drink.id} drink={drink} goToDrink={goToDrink} />
+        <DrinkListing
+          key={drink.id}
+          drink={drink}
+          goToDrink={goToDrink}
+          isHomePage={isHomePage}
+        />
       ))}
     </>
   );

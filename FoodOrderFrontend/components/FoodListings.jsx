@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import FoodListing from "./FoodListing";
 import { useNavigate } from "react-router-dom";
 
-const FoodListings = ({ foods }) => {
+const FoodListings = ({ foods, isHomePage }) => {
   const dispatch = useDispatch();
   const FoodData = useSelector((state) => state.foods);
   const filter = useSelector((state) => state.filter.currentFilter);
@@ -31,7 +31,12 @@ const FoodListings = ({ foods }) => {
   return (
     <>
       {foods.map((food) => (
-        <FoodListing key={food.id} food={food} goToFood={goToFood} />
+        <FoodListing
+          key={food.id}
+          food={food}
+          goToFood={goToFood}
+          isHomePage={isHomePage}
+        />
       ))}
     </>
   );

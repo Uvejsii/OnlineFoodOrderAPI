@@ -12,11 +12,17 @@ import AdminPage from "../Pages/AdminPage";
 import FoodDetail from "../Pages/FoodDetail";
 import DrinkDetail from "../Pages/DrinkDetail";
 import NotFound from "../Pages/NotFound";
+import HomePage from "../Pages/HomePage";
+import Login from "../Pages/Login";
+import Register from "../Pages/Register";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />}>
-      <Route index element={<AdminPage />}></Route>
+      <Route index element={<HomePage />}></Route>
+      <Route path="/register" element={<Register />}></Route>
+      <Route path="/login" element={<Login />}></Route>
+      <Route path="/admin" element={<AdminPage />}></Route>
       <Route path="/food/:foodId" element={<FoodDetail />}></Route>
       <Route path="/drink/:drinkId" element={<DrinkDetail />}></Route>
       <Route path="*" element={<NotFound />}></Route>

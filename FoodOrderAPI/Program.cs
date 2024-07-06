@@ -1,21 +1,65 @@
 using System.Net;
 using FoodOrderAPI.DatabaseContext;
 using FoodOrderAPI.DatabaseContext.Models.Products;
+using FoodOrderAPI.DatabaseContext.Models.Users;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ModelsContext>();
+
+builder.Services.AddAuthorization();
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
+    .AddEntityFrameworkStores<ModelsContext>();
+
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy("AllowAll", builder => 
+//         builder.AllowAnyOrigin()
+//                .AllowAnyMethod()
+//                .AllowAnyHeader());
+// });
+
+// builder.Services.AddCors(options =>
+//         {
+//             options.AddPolicy("AllowSpecificOrigin",
+//                 builder =>
+//                 {
+//                     builder.AllowAnyOrigin()
+//                            .AllowAnyHeader()
+//                            .AllowAnyMethod();
+//                 });
+//         });
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", builder => 
-        builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader());
+    options.AddPolicy("AllowFrontend",
+        builder => builder
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
 });
 
 var app = builder.Build();
-app.UseCors("AllowAll");
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapIdentityApi<ApplicationUser>();
+app.UseCors("AllowFrontend");
 
 app.MapGet("/", () => "Hello World!");
+
+// ACCOUNT ENDPOINTS
+app.MapPost("/logout", async (SignInManager<ApplicationUser> signInManager) => {
+    await signInManager.SignOutAsync();
+    return Results.Ok();
+}).RequireAuthorization();
+
+app.MapGet("/pingauth", (ClaimsPrincipal user) => {
+    var email = user.FindFirstValue(ClaimTypes.Email);
+    return Results.Json(new { Email = email });
+}).RequireAuthorization();
 
 // FOOD ENDPOINTS
 app.MapGet("/getAllFoodProducts", async (ModelsContext context) => {

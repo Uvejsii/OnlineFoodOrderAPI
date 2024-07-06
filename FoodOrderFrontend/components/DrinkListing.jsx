@@ -1,7 +1,7 @@
 import DeleteDrinkButton from "./DeleteDrinkButton";
 import EditDrinkButton from "./EditDrinkButton";
 
-const DrinkListing = ({ drink, goToDrink }) => {
+const DrinkListing = ({ drink, goToDrink, isHomePage }) => {
   const onGoToDrink = (drinkId) => {
     goToDrink(drinkId);
   };
@@ -27,8 +27,17 @@ const DrinkListing = ({ drink, goToDrink }) => {
           </h5>
         </div>
         <div className="card-footer d-flex justify-content-center gap-3">
-          <DeleteDrinkButton drink={drink} />
-          <EditDrinkButton drink={drink} />
+          {isHomePage ? (
+            <div className="d-flex justify-content-between w-100 fs-5 fw-semibold">
+              <p className="m-0">€ {drink.price.toFixed(2)}</p>
+              <p className="m-0">Rating {drink.rating}</p>
+            </div>
+          ) : (
+            <>
+              <DeleteDrinkButton drink={drink} />
+              <EditDrinkButton drink={drink} />
+            </>
+          )}
         </div>
       </div>
     </div>

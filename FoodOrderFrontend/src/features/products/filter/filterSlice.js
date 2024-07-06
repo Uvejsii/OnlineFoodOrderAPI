@@ -2,6 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   currentFilter: "Filter All",
+  filteredProducts: {
+    foods: [],
+    drinks: [],
+  },
 };
 
 export const filterSlice = createSlice({

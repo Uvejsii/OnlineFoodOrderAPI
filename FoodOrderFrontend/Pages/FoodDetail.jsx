@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getClickedFood } from "../src/features/products/food/foodSlice";
 import { useParams } from "react-router-dom";
 import GoToAdminPageButton from "../components/GoToAdminPageButton";
+import GoToHomePageButton from "../components/GoToHomePageButton";
 
 const FoodDetail = () => {
   const dispatch = useDispatch();
@@ -17,7 +18,10 @@ const FoodDetail = () => {
     <>
       <div className="container d-flex justify-content-center align-items-center vh-100">
         <div className="food-detail-wrapper">
-          <GoToAdminPageButton />
+          <div className="navigate-btns d-flex gap-5">
+            <GoToAdminPageButton />
+            <GoToHomePageButton />
+          </div>
           <div className="food-detail-container border">
             <img src={food.imageUrl} alt={`${food.imageUrl} image`} />
             <h5>Rating: {food.rating}</h5>

@@ -1,7 +1,7 @@
 import DeleteFoodButton from "./DeleteFoodButton";
 import EditFoodButton from "./EditFoodButton";
 
-const FoodListing = ({ food, goToFood }) => {
+const FoodListing = ({ food, goToFood, isHomePage }) => {
   const onGoToFood = (foodId) => {
     goToFood(foodId);
   };
@@ -28,8 +28,17 @@ const FoodListing = ({ food, goToFood }) => {
             </h5>
           </div>
           <div className="card-footer d-flex justify-content-between gap-3">
-            <DeleteFoodButton food={food} />
-            <EditFoodButton food={food} />
+            {isHomePage ? (
+              <div className="d-flex justify-content-between w-100 fs-5 fw-semibold">
+                <p className="m-0">€ {food.price.toFixed(2)}</p>
+                <p className="m-0">Rating {food.rating}</p>
+              </div>
+            ) : (
+              <>
+                <DeleteFoodButton food={food} />
+                <EditFoodButton food={food} />
+              </>
+            )}
           </div>
         </div>
       </div>

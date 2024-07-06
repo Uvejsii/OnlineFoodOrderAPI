@@ -1,5 +1,19 @@
 @url = http://localhost:5071
 
+POST {{url}}/register
+Content-Type: application/json
+
+{
+    "Email": "testadmin@gmail.com",
+    "Password": "@Admin00"
+}
+
+###
+
+GET {{url}}/pingauth
+
+###
+
 // FOOD ENDPOINTS
 GET {{url}}/getAllFoodProducts
 
