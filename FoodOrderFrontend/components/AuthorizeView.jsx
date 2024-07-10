@@ -11,7 +11,7 @@ function AuthorizeView(props) {
 
   useEffect(() => {
     let retryCount = 0;
-    const maxRetries = 10;
+    const maxRetries = 5;
     const delay = 1000;
 
     function wait(delay) {

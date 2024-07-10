@@ -14,6 +14,18 @@ GET {{url}}/pingauth
 
 ###
 
+POST {{url}}/addToCart
+Content-Type: application/json
+Cookie: .AspNetCore.Identity.Application=CfDJ8BimS0EU7TRBpLNIPGxxPNqaf7FzgMrQmhF52R50CHtnE9ULnVOjFbtV42ZLW7rXgFcnue7Z26_vs7qG0U3PkcsfpxIhnY0FMvy-0LbGjQlLG-Wl0ALvwe-WT6RskLxUFWfCgixACiVsRaoVGu3N_0SFcZeg7rk_XDCEWgLzKu-GU3pQR4Nm9KrBzvxbxa0muO3Di6ju4DOf3biz1f7lN8crrBMlR0hzKLFJDiUeMPsiowavwijuAZx1NYDiRw1A8WWQjdbIGcy2YSdjUpgtg9mwKYfmEg6u9B6564M0fsiLU-XetcCQ5e8oRBIdODRwj1dDZ-KZCN7VCqWcQ4INjUFygBeyEmDSPqZyGLN4wK5FNpDTEJYdT_YHsNQ7XsUJuYAQ_-B6pSB3Qx5ukYakQzSEOgZgKhflpRlbCH4CLZVbf0hqPoH9JUjkePPlc2OatDTyqGmktFW-At-XMUfFVOrPc77vf1c5UqZwX_NsGimXuecXy3pzGqMn-OEU5sumgb8Bevlm--W7dydJlonry7KUryfsqjj4jpfjPry16CgT-tx7_IJ0c2FbWpeuvNUhWbkvpP9iw7_RlwcstMgyLRvyVTPh8663hLoKYauCxF5jmIwImG6ypCjESkFP8fzTdUgJ0RpWjmBzyJGHvCDu6W3wRPu9qxLSnhFOYFtTQ6pZmYGbr4rkExP-gjey-HxBfwiou4ADHLuAX1pHVD8JsZJvG9UBAZEC6RRpflpNe43-
+
+{
+    "ProductId": 1,
+    "ProductType": "Food",
+    "Quantity": 1,
+}
+
+###
+
 // FOOD ENDPOINTS
 GET {{url}}/getAllFoodProducts
 

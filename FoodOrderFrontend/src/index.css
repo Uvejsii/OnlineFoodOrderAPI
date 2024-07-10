@@ -1,3 +1,7 @@
+* {
+  font-family: "Poppins", sans-serif;
+}
+
 .food-card:hover,
 .drink-card:hover {
   box-shadow: 0 8px 9px 7px rgba(0, 0, 0, 0.17);
@@ -53,4 +57,33 @@
 .bg-glass {
   background-color: hsla(360, 94%, 45%, 0.3) !important;
   backdrop-filter: saturate(100%) blur(10px);
+}
+
+/* NOT FOUND PAGE */
+
+.page_404 {
+  padding: 40px 0;
+  background: #fff;
+}
+
+.page_404 img {
+  width: 100%;
+}
+
+.four_zero_four_bg {
+  background-image: url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif);
+  height: 400px;
+  background-position: center;
+}
+
+.four_zero_four_bg h1 {
+  font-size: 80px;
+}
+
+.four_zero_four_bg h3 {
+  font-size: 80px;
+}
+
+.contant_box_404 {
+  margin-top: -50px;
 }

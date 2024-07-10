@@ -15,6 +15,7 @@ import NotFound from "../Pages/NotFound";
 import HomePage from "../Pages/HomePage";
 import Login from "../Pages/Login";
 import Register from "../Pages/Register";
+import Cart from "../Pages/Cart";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +26,7 @@ const router = createBrowserRouter(
       <Route path="/admin" element={<AdminPage />}></Route>
       <Route path="/food/:foodId" element={<FoodDetail />}></Route>
       <Route path="/drink/:drinkId" element={<DrinkDetail />}></Route>
+      <Route path="/cart" element={<Cart />}></Route>
       <Route path="*" element={<NotFound />}></Route>
     </Route>
   )
