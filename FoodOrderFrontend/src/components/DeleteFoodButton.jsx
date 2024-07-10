@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { deleteFood } from "../src/features/products/food/foodSlice";
+import { deleteFood } from "../features/products/food/foodSlice";
 import { Trash3Fill } from "react-bootstrap-icons";
 
 const DeleteFoodButton = ({ food }) => {

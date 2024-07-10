@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { setEditFoodData } from "../src/features/products/food/foodSlice";
+import { setEditFoodData } from "../features/products/food/foodSlice";
 import { PencilSquare } from "react-bootstrap-icons";
 
 const EditFoodButton = ({ food }) => {

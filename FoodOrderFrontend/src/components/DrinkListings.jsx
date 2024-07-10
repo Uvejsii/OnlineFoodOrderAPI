@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDrinks } from "../src/features/products/drink/drinkSlice";
+import { fetchDrinks } from "../features/products/drink/drinkSlice";
 import DrinkListing from "./DrinkListing";
 import { useNavigate } from "react-router-dom";
 

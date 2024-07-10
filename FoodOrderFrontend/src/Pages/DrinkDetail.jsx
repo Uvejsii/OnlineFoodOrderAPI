@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getClickedDrink } from "../src/features/products/drink/drinkSlice";
+import { getClickedDrink } from "../features/products/drink/drinkSlice";
 import GoToAdminPageButton from "../components/GoToAdminPageButton";
 import GoToHomePageButton from "../components/GoToHomePageButton";
 

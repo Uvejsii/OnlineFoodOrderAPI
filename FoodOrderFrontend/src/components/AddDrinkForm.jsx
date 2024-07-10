@@ -1,10 +1,10 @@
-import { useDispatch } from "react-redux";
-import { addFood } from "../src/features/products/food/foodSlice";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addDrink } from "../features/products/drink/drinkSlice";
 
-const AddFoodForm = () => {
+const AddDrinkForm = () => {
   const dispatch = useDispatch();
-  const [newFood, setNewFood] = useState({
+  const [newDrink, setNewDrink] = useState({
     imageUrl: "",
     name: "",
     description: "",
@@ -16,37 +16,36 @@ const AddFoodForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewFood({
-      ...newFood,
+    setNewDrink({
+      ...newDrink,
       [name]: value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addFood(newFood));
+    dispatch(addDrink(newDrink));
   };
-
   return (
     <form onSubmit={handleSubmit}>
       <div
         className="modal fade"
-        id="exampleModal"
-        tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
+        id="addDrinkModal"
+        tabIndex="-3"
+        aria-labelledby="addDrinkModalLabel"
         aria-hidden="true"
       >
         <div className="modal-dialog">
           <div className="modal-content">
-            <div className="col-12 text-primary fw-bold form-container border border-primary rounded-3 bg-primary-subtle p-4">
-              <h2 className="text-center fw-bold">Add New Food</h2>
+            <div className="col-12 text-success fw-bold form-container border border-success rounded-3 bg-success-subtle p-4">
+              <h2 className="text-center fw-bold">Add New Drink</h2>
               <div className="inputs-container mb-3">
                 <p className="m-0">Image Url</p>
                 <input
                   type="text"
                   name="imageUrl"
                   className="w-100"
-                  value={newFood.imageUrl}
+                  value={newDrink.imageUrl}
                   onChange={handleChange}
                 />
               </div>
@@ -56,7 +55,7 @@ const AddFoodForm = () => {
                   type="text"
                   name="name"
                   className="w-100"
-                  value={newFood.name}
+                  value={newDrink.name}
                   onChange={handleChange}
                 />
               </div>
@@ -66,7 +65,7 @@ const AddFoodForm = () => {
                   type="text"
                   name="description"
                   className="w-100"
-                  value={newFood.description}
+                  value={newDrink.description}
                   onChange={handleChange}
                 />
               </div>
@@ -76,7 +75,7 @@ const AddFoodForm = () => {
                   type="number"
                   name="price"
                   className="w-100"
-                  value={newFood.price}
+                  value={newDrink.price}
                   onChange={handleChange}
                 />
               </div>
@@ -86,7 +85,7 @@ const AddFoodForm = () => {
                   type="number"
                   name="rating"
                   className="w-100"
-                  value={newFood.rating}
+                  value={newDrink.rating}
                   onChange={handleChange}
                 />
               </div>
@@ -96,7 +95,7 @@ const AddFoodForm = () => {
                   type="text"
                   name="category"
                   className="w-100 mb-3"
-                  value={newFood.category}
+                  value={newDrink.category}
                   onChange={handleChange}
                 />
               </div>
@@ -106,12 +105,12 @@ const AddFoodForm = () => {
                   type="number"
                   name="quantity"
                   className="w-100"
-                  value={newFood.quantity}
+                  value={newDrink.quantity}
                   onChange={handleChange}
                 />
               </div>
               <button
-                className="btn btn-primary w-100 mt-4 fw-bold"
+                className="btn btn-success w-100 mt-4 fw-bold"
                 data-bs-dismiss="modal"
               >
                 CONFIRM ADD
@@ -124,4 +123,4 @@ const AddFoodForm = () => {
   );
 };
 
-export default AddFoodForm;
+export default AddDrinkForm;

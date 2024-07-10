@@ -1,6 +1,6 @@
 import { Trash3Fill } from "react-bootstrap-icons";
 import { useDispatch } from "react-redux";
-import { deleteDrink } from "../src/features/products/drink/drinkSlice";
+import { deleteDrink } from "../features/products/drink/drinkSlice";
 
 const DeleteDrinkButton = ({ drink }) => {
   const dispatch = useDispatch();

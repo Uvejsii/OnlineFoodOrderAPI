@@ -5,7 +5,10 @@ const CartItems = () => {
 
   useEffect(() => {
     const fetchCartItems = async () => {
-      const res = await fetch("http://localhost:5071/getAllAddedItems");
+      const res = await fetch("http://localhost:5071/getAllAddedItems", {
+        method: "GET",
+        credentials: "include",
+      });
       const data = await res.json();
       setCartItems(data);
     };

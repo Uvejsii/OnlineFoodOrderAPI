@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getClickedFood } from "../src/features/products/food/foodSlice";
+import { getClickedFood } from "../features/products/food/foodSlice";
 import { useParams } from "react-router-dom";
 import GoToAdminPageButton from "../components/GoToAdminPageButton";
 import GoToHomePageButton from "../components/GoToHomePageButton";

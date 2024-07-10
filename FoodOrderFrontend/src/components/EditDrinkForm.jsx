@@ -1,51 +1,47 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addDrink } from "../src/features/products/drink/drinkSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { editDrink, fetchDrinks } from "../features/products/drink/drinkSlice";
 
-const AddDrinkForm = () => {
+const EditDrinkForm = () => {
   const dispatch = useDispatch();
-  const [newDrink, setNewDrink] = useState({
-    imageUrl: "",
-    name: "",
-    description: "",
-    price: 0,
-    rating: 0,
-    category: "",
-    quantity: 1,
-  });
+  const editDrinkData = useSelector((state) => state.drinks.editDrinkData);
+  const [formData, setFormData] = useState(editDrinkData || {});
+
+  useEffect(() => {
+    setFormData(editDrinkData);
+  }, [editDrinkData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewDrink({
-      ...newDrink,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addDrink(newDrink));
+    dispatch(editDrink(formData));
+    dispatch(fetchDrinks());
   };
+
   return (
     <form onSubmit={handleSubmit}>
       <div
         className="modal fade"
-        id="addDrinkModal"
-        tabIndex="-3"
-        aria-labelledby="addDrinkModalLabel"
+        id="editDrinkModal"
+        tabIndex="-4"
+        aria-labelledby="editDrinkModalLabel"
         aria-hidden="true"
       >
         <div className="modal-dialog">
           <div className="modal-content">
-            <div className="col-12 text-success fw-bold form-container border border-success rounded-3 bg-success-subtle p-4">
-              <h2 className="text-center fw-bold">Add New Drink</h2>
+            <div className="col-12 text-warning fw-bold form-container border border-warning rounded-3 bg-warning-subtle p-4">
+              <h2 className="text-center fw-bold">Edit Drink</h2>
               <div className="inputs-container mb-3">
                 <p className="m-0">Image Url</p>
                 <input
                   type="text"
                   name="imageUrl"
                   className="w-100"
-                  value={newDrink.imageUrl}
+                  value={formData.imageUrl}
                   onChange={handleChange}
                 />
               </div>
@@ -55,7 +51,7 @@ const AddDrinkForm = () => {
                   type="text"
                   name="name"
                   className="w-100"
-                  value={newDrink.name}
+                  value={formData.name}
                   onChange={handleChange}
                 />
               </div>
@@ -65,7 +61,7 @@ const AddDrinkForm = () => {
                   type="text"
                   name="description"
                   className="w-100"
-                  value={newDrink.description}
+                  value={formData.description}
                   onChange={handleChange}
                 />
               </div>
@@ -75,7 +71,7 @@ const AddDrinkForm = () => {
                   type="number"
                   name="price"
                   className="w-100"
-                  value={newDrink.price}
+                  value={formData.price}
                   onChange={handleChange}
                 />
               </div>
@@ -85,7 +81,7 @@ const AddDrinkForm = () => {
                   type="number"
                   name="rating"
                   className="w-100"
-                  value={newDrink.rating}
+                  value={formData.rating}
                   onChange={handleChange}
                 />
               </div>
@@ -95,7 +91,7 @@ const AddDrinkForm = () => {
                   type="text"
                   name="category"
                   className="w-100 mb-3"
-                  value={newDrink.category}
+                  value={formData.category}
                   onChange={handleChange}
                 />
               </div>
@@ -105,15 +101,16 @@ const AddDrinkForm = () => {
                   type="number"
                   name="quantity"
                   className="w-100"
-                  value={newDrink.quantity}
+                  value={formData.quantity}
                   onChange={handleChange}
                 />
               </div>
               <button
-                className="btn btn-success w-100 mt-4 fw-bold"
+                type="submit"
+                className="btn btn-warning w-100 mt-4 fw-bold"
                 data-bs-dismiss="modal"
               >
-                CONFIRM ADD
+                CONFIRM EDIT
               </button>
             </div>
           </div>
@@ -123,4 +120,4 @@ const AddDrinkForm = () => {
   );
 };
 
-export default AddDrinkForm;
+export default EditDrinkForm;

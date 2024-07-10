@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { fetchFoods } from "../src/features/products/food/foodSlice";
+import { fetchFoods } from "../features/products/food/foodSlice";
 import { useEffect } from "react";
 import FoodListing from "./FoodListing";
 import { useNavigate } from "react-router-dom";

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { editFood, fetchFoods } from "../src/features/products/food/foodSlice";
+import { editFood, fetchFoods } from "../features/products/food/foodSlice";
 import { useState, useEffect } from "react";
 
 const EditFoodForm = () => {

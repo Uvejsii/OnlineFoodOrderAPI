@@ -148,100 +148,6 @@ app.MapDelete("/deleteDrink/{id}", async (ModelsContext context, int id) => {
 });
 
 // ORDER ENDPOINTS
-// app.MapPost("/cart/add", async (ModelsContext context, CartItem cartItem) =>
-// {
-//     context.CartItems.Add(cartItem);
-//     await context.SaveChangesAsync();
-//     return Results.Ok(cartItem);
-// });
-
-// app.MapPost("/addToCart", async (ClaimsPrincipal user, HttpContext httpContext, UserManager<ApplicationUser> userManager,ModelsContext context, CartItem cartItem) =>
-// {
-//     try
-//     {
-//         var userEmail = user.FindFirstValue(ClaimValueTypes.Email);
-//         var user1 = await userManager.GetUserAsync(httpContext.User);
-//         if (userEmail == null)
-//         {
-//             return Results.Unauthorized();
-//         }
-
-//         if (user1 == null)
-//         {
-//             return Results.Unauthorized();
-//         }
-
-//         // Find or create a cart for the user
-//         var cart = await context.Carts.FirstOrDefaultAsync(c => c.UserId == user1.Id);
-//         if (cart == null)
-//         {
-//             // Create a new cart if one doesn't exist for the user
-//             cart = new Cart { UserId = user1.Id};
-//             context.Carts.Add(cart);
-//             await context.SaveChangesAsync(); // Save changes to generate cart Id
-//         }
-
-//         // Assign the correct CartId to the cartItem
-//         cartItem.CartId = cart.Id;
-
-//         // Add the cartItem to context and save changes
-//         context.CartItems.Add(cartItem);
-//         await context.SaveChangesAsync();
-
-//         return Results.Ok(cartItem);
-//     }
-//     catch (Exception ex)
-//     {
-//         Console.WriteLine($"Error adding to cart: {ex.Message}");
-//         return Results.NotFound(ex.Message);
-//     }
-// }).RequireAuthorization();
-
-// app.MapPost("/addToCart", async (HttpContext httpContext, ModelsContext dbContext, UserManager<ApplicationUser> userManager, int productId, string productType, int quantity) =>
-// {
-//     var user = await userManager.GetUserAsync(httpContext.User);
-//     if (user == null)
-//     {
-//         return Results.Unauthorized();
-//     }
-
-//     var userId = user.Id;
-
-//     var cart = await dbContext.Carts
-//         .Include(c => c.CartItems)
-//         .FirstOrDefaultAsync(c => c.UserId == userId);
-
-//     if (cart == null)
-//     {
-//         cart = new Cart
-//         {
-//             UserId = userId,
-//             EmailAddress = user.Email,
-//             CartItems = new List<CartItem>()
-//         };
-//         dbContext.Carts.Add(cart);
-//     }
-
-//     var existingCartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId && ci.ProductType == productType);
-//     if (existingCartItem != null)
-//     {
-//         existingCartItem.Quantity += quantity;
-//     }
-//     else
-//     {
-//         cart.CartItems.Add(new CartItem
-//         {
-//             ProductId = productId,
-//             ProductType = productType,
-//             Quantity = quantity
-//         });
-//     }
-
-//     await dbContext.SaveChangesAsync();
-
-//     return Results.Ok(cart);
-// }).RequireAuthorization();
-
 app.MapPost("/addToCart", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext db) =>
 {
     var cartItemDto = await httpContext.Request.ReadFromJsonAsync<CartItemDto>();
@@ -250,13 +156,13 @@ app.MapPost("/addToCart", async (HttpContext httpContext, UserManager<Applicatio
         return Results.BadRequest("Invalid request payload.");
     }
 
-    var user = await userManager.GetUserAsync(httpContext.User); // Await the user retrieval
+    var user = await userManager.GetUserAsync(httpContext.User);
     if (user == null)
     {
         return Results.BadRequest("User not found.");
     }
 
-    var foundUser = await db.Users.FirstOrDefaultAsync(u => u.Id == user.Id); // Use the user ID directly without conversion
+    var foundUser = await db.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
     if (foundUser == null)
     {
         return Results.BadRequest("User not found in database.");
@@ -300,13 +206,35 @@ app.MapPost("/addToCart", async (HttpContext httpContext, UserManager<Applicatio
     return Results.Ok(new { Message = "Item added to cart successfully!" });
 }).RequireAuthorization();
 
-app.MapGet("/getAllAddedItems", async (ModelsContext context) => {
-    return Results.Ok(await context.CartItems.ToListAsync());
-});
+app.MapGet("/getAllAddedItems", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext context) =>
+{
+    var user = await userManager.GetUserAsync(httpContext.User);
+    if (user == null)
+    {
+        return Results.Unauthorized();
+    }
+
+    var foundUserId = user.Id;
+    var cartItems = await context.CartItems
+        .Include(ci => ci.Cart)
+        .Where(ci => ci.Cart.UserId == foundUserId)
+        .Select(ci => new 
+        {
+            ci.ProductId,
+            ci.ProductType,
+            ci.Quantity,
+            ci.Name,
+            ci.Price,
+            ci.ImageUrl
+        })
+        .ToListAsync();
+
+    return Results.Ok(cartItems);
+}).RequireAuthorization();
+
 
 app.MapPost("/order/create", async (ModelsContext context, Order order) =>
 {
-    // Assuming the user is authenticated and you have access to their UserId
     var user = await context.Users.FindAsync(order.UserId);
     if (user == null) return Results.BadRequest("Invalid user ID");
 
