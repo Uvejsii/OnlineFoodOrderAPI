@@ -1,34 +1,85 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchAllCartItems,
+  removeFromCart,
+  updateCartItemQuantity,
+} from "../features/orders/ordersSlice";
 
 const CartItems = () => {
-  const [cartItems, setCartItems] = useState([]);
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.orders.cartItems);
+  const isLoading = useSelector((state) => state.orders.isLoading);
+  const error = useSelector((state) => state.orders.error);
 
   useEffect(() => {
-    const fetchCartItems = async () => {
-      const res = await fetch("http://localhost:5071/getAllAddedItems", {
-        method: "GET",
-        credentials: "include",
-      });
-      const data = await res.json();
-      setCartItems(data);
-    };
-    fetchCartItems();
-  }, []);
+    dispatch(fetchAllCartItems());
+  }, [dispatch]);
+
+  const handleItemDelete = (productId) => {
+    dispatch(removeFromCart(productId));
+  };
+
+  const handleIncrement = (product) => {
+    dispatch(
+      updateCartItemQuantity({ productId: product.productId, change: 1 })
+    );
+  };
+
+  const handleDecrement = (product) => {
+    if (product.quantity == 1) return;
+
+    dispatch(
+      updateCartItemQuantity({ productId: product.productId, change: -1 })
+    );
+  };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Failed to fetch cart items. Please refresh th page.</p>;
+  }
+
   return (
-    <>
-      {cartItems.map((item, index) => (
-        <div key={index}>
-          {console.log(item)}
-          <p>ID: {item.productId}</p>
-          <img src={item.imageUrl} alt="" />
-          <h5>Name: {item.name}</h5>
-          <p>Price: € {item.price}</p>
-          <p>QTY: {item.quantity}</p>
-          <p>Type: {item.productType}</p>
-          <hr />
-        </div>
-      ))}
-    </>
+    <div className="d-flex justify-content-between gap-2 flex-wrap">
+      {cartItems.length > 0 ? (
+        cartItems.map((item, index) => (
+          <div key={index} className="border p-2">
+            <p>ID: {item.productId}</p>
+            <img src={item.imageUrl} alt={`${item.name} image`} />
+            <h5>Name: {item.name}</h5>
+            <p>Price: € {item.price}</p>
+            <div className="d-flex align-items-center">
+              <span className="me-2">QTY:</span>
+              <button
+                className="btn btn-warning fw-semibold"
+                onClick={() => handleDecrement(item)}
+              >
+                -
+              </button>
+              <p className="m-0 mx-2 fw-semibold">{item.quantity}</p>
+              <button
+                className="btn btn-primary fw-semibold"
+                onClick={() => handleIncrement(item)}
+              >
+                +
+              </button>
+            </div>
+            <p>Type: {item.productType}</p>
+            <button
+              className="btn btn-danger fw-semibold w-100"
+              onClick={() => handleItemDelete(item.productId)}
+            >
+              Remove
+            </button>
+          </div>
+        ))
+      ) : (
+        <p>No items in the cart.</p>
+      )}
+    </div>
   );
 };
 

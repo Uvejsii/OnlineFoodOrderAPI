@@ -1,4 +1,4 @@
-// import GoToHomePageButton from "../components/GoToHomePageButton";
+import GoToHomePageButton from "../components/GoToHomePageButton";
 
 const NotFound = () => {
   return (

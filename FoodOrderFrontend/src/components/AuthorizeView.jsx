@@ -22,9 +22,7 @@ function AuthorizeView(props) {
       try {
         let response = await fetch(url, options);
         if (response.status === 200) {
-          console.log("Authorized");
           let json = await response.json();
-          console.log("email: ", json.email);
           setUser({ email: json.email });
           setAuthorized(true);
           return response;

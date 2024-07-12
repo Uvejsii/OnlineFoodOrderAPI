@@ -10,6 +10,7 @@ import SearchProducts from "../components/SearchProducts";
 import { useState } from "react";
 import AuthorizeView, { AuthorizedUser } from "../components/AuthorizeView";
 import LogOutButton from "../components/LogOutButton";
+import { Link } from "react-router-dom";
 
 const AdminPage = () => {
   const [filteredProducts, setFilteredProducts] = useState({
@@ -27,6 +28,7 @@ const AdminPage = () => {
             <AuthorizedUser value="email" />
           </span>
         </h5>
+        <Link to="/cart">Cart</Link>
         <div className="d-flex justify-content-end mb-3">
           <LogOutButton />
         </div>

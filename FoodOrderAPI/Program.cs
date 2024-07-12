@@ -232,6 +232,93 @@ app.MapGet("/getAllAddedItems", async (HttpContext httpContext, UserManager<Appl
     return Results.Ok(cartItems);
 }).RequireAuthorization();
 
+app.MapDelete("/removeCartItem/{id}", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext context, int id) => {
+    var user = await userManager.GetUserAsync(httpContext.User);
+    if (user is null)
+    {
+        return Results.Unauthorized();
+    }
+
+    var foundUserId = user.Id;
+
+    var cart = await context.Carts.Include(c => c.CartItems).FirstOrDefaultAsync(c => c.UserId == foundUserId);
+
+    if (cart is null)
+    {
+        return Results.Unauthorized();
+    }
+
+    var cartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == id);
+
+    if (cartItem is null)
+    { 
+        return Results.NotFound("Cart item not found or you do not have permission to delete it.");  
+    }
+
+    context.CartItems.Remove(cartItem);
+    await context.SaveChangesAsync();
+
+    var updatedCartItems = await context.CartItems
+        .Include(ci => ci.Cart)
+        .Where(ci => ci.Cart.UserId == foundUserId)
+        .Select(ci => new {
+            ci.ProductId,
+            ci.ProductType,
+            ci.Quantity,
+            ci.Name,
+            ci.Price,
+            ci.ImageUrl
+        })
+        .ToListAsync();
+
+    return Results.Ok(updatedCartItems);
+}).RequireAuthorization();
+
+app.MapPut("/updateCartItemQuantity/{id}/{change}", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext context, int id, int change) => {
+    var user = await userManager.GetUserAsync(httpContext.User);
+    if (user is null)
+    {
+        return Results.Unauthorized();
+    }
+
+    var foundUserId = user.Id;
+
+    var cart = await context.Carts.Include(c => c.CartItems).FirstOrDefaultAsync(c => c.UserId == foundUserId);
+    if (cart is null)
+    {
+        return Results.Unauthorized();
+    }
+
+    var cartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == id);
+    if (cartItem is null)
+    {
+        return Results.NotFound("Cart item not found or you do not have permission to update it.");
+    }
+
+    cartItem.Quantity += change;
+
+    if (cartItem.Quantity < 1)
+    {
+        return Results.BadRequest("Quantity cannot be less than 1.");
+    }
+
+    await context.SaveChangesAsync();
+
+    var updatedCartItems = await context.CartItems
+        .Include(ci => ci.Cart)
+        .Where(ci => ci.Cart.UserId == foundUserId)
+        .Select(ci => new {
+            ci.ProductId,
+            ci.ProductType,
+            ci.Quantity,
+            ci.Name,
+            ci.Price,
+            ci.ImageUrl
+        })
+        .ToListAsync();
+
+    return Results.Ok(updatedCartItems);
+}).RequireAuthorization();
 
 app.MapPost("/order/create", async (ModelsContext context, Order order) =>
 {
