@@ -25,9 +25,9 @@ export const fetchAllCartItems = createAsyncThunk(
 
 export const removeFromCart = createAsyncThunk(
   "removeFromCart",
-  async (productId) => {
+  async ({ productId, productType }) => {
     const response = await fetch(
-      `http://localhost:5071/removeCartItem/${productId}`,
+      `http://localhost:5071/removeCartItem/${productId}/${productType}`,
       {
         method: "DELETE",
         credentials: "include",
@@ -39,9 +39,9 @@ export const removeFromCart = createAsyncThunk(
 
 export const updateCartItemQuantity = createAsyncThunk(
   "updateCartItemQuantity",
-  async ({ productId, change }) => {
+  async ({ productId, change, productType }) => {
     const response = await fetch(
-      `http://localhost:5071/updateCartItemQuantity/${productId}/${change}`,
+      `http://localhost:5071/updateCartItemQuantity/${productId}/${change}/${productType}`,
       {
         method: "PUT",
         credentials: "include",

@@ -16,13 +16,22 @@ const CartItems = () => {
     dispatch(fetchAllCartItems());
   }, [dispatch]);
 
-  const handleItemDelete = (productId) => {
-    dispatch(removeFromCart(productId));
+  const handleItemDelete = (product) => {
+    dispatch(
+      removeFromCart({
+        productId: product.productId,
+        productType: product.productType,
+      })
+    );
   };
 
   const handleIncrement = (product) => {
     dispatch(
-      updateCartItemQuantity({ productId: product.productId, change: 1 })
+      updateCartItemQuantity({
+        productId: product.productId,
+        change: 1,
+        productType: product.productType,
+      })
     );
   };
 
@@ -30,7 +39,11 @@ const CartItems = () => {
     if (product.quantity == 1) return;
 
     dispatch(
-      updateCartItemQuantity({ productId: product.productId, change: -1 })
+      updateCartItemQuantity({
+        productId: product.productId,
+        change: -1,
+        productType: product.productType,
+      })
     );
   };
 
@@ -43,7 +56,7 @@ const CartItems = () => {
   }
 
   return (
-    <div className="d-flex justify-content-between gap-2 flex-wrap">
+    <div className="d-flex gap-5 flex-wrap">
       {cartItems.length > 0 ? (
         cartItems.map((item, index) => (
           <div key={index} className="border p-2">
@@ -70,7 +83,7 @@ const CartItems = () => {
             <p>Type: {item.productType}</p>
             <button
               className="btn btn-danger fw-semibold w-100"
-              onClick={() => handleItemDelete(item.productId)}
+              onClick={() => handleItemDelete(item)}
             >
               Remove
             </button>
