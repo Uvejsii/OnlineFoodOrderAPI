@@ -232,7 +232,7 @@ app.MapGet("/getAllAddedItems", async (HttpContext httpContext, UserManager<Appl
     return Results.Ok(cartItems);
 }).RequireAuthorization();
 
-app.MapDelete("/removeCartItem/{id}", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext context, int id) => {
+app.MapDelete("/removeCartItem/{id}/{productType}", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext context, int id, string productType) => {
     var user = await userManager.GetUserAsync(httpContext.User);
     if (user is null)
     {
@@ -248,7 +248,7 @@ app.MapDelete("/removeCartItem/{id}", async (HttpContext httpContext, UserManage
         return Results.Unauthorized();
     }
 
-    var cartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == id);
+    var cartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == id && ci.ProductType.Equals(productType, StringComparison.OrdinalIgnoreCase));
 
     if (cartItem is null)
     { 
@@ -274,7 +274,7 @@ app.MapDelete("/removeCartItem/{id}", async (HttpContext httpContext, UserManage
     return Results.Ok(updatedCartItems);
 }).RequireAuthorization();
 
-app.MapPut("/updateCartItemQuantity/{id}/{change}", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext context, int id, int change) => {
+app.MapPut("/updateCartItemQuantity/{id}/{change}/{productType}", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext context, int id, int change, string productType) => {
     var user = await userManager.GetUserAsync(httpContext.User);
     if (user is null)
     {
@@ -289,7 +289,7 @@ app.MapPut("/updateCartItemQuantity/{id}/{change}", async (HttpContext httpConte
         return Results.Unauthorized();
     }
 
-    var cartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == id);
+    var cartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == id && ci.ProductType.Equals(productType, StringComparison.OrdinalIgnoreCase));
     if (cartItem is null)
     {
         return Results.NotFound("Cart item not found or you do not have permission to update it.");
