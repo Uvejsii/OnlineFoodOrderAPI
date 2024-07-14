@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using FoodOrderAPI.DatabaseContext.Models.Orders;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ModelsContext>();
@@ -320,15 +321,72 @@ app.MapPut("/updateCartItemQuantity/{id}/{change}/{productType}", async (HttpCon
     return Results.Ok(updatedCartItems);
 }).RequireAuthorization();
 
-app.MapPost("/order/create", async (ModelsContext context, Order order) =>
-{
-    var user = await context.Users.FindAsync(order.UserId);
-    if (user == null) return Results.BadRequest("Invalid user ID");
+app.MapGet("/getOrderTotal", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext context) => {
+    var user = await userManager.GetUserAsync(httpContext.User);
+    if (user is null)
+    {
+        return Results.Unauthorized();
+    }
+
+    var foundUserId = user.Id;
+
+    var cart = await context.Carts.Include(c => c.CartItems).FirstOrDefaultAsync(c => c.UserId == foundUserId);
+    if (cart is null)
+    {
+        return Results.Unauthorized();
+    }
+
+    var orderTotal = cart.CartItems.Sum(ci => ci.Price * ci.Quantity);
+
+    return Results.Ok(new {OrderTotal = orderTotal});
+}).RequireAuthorization();
+
+app.MapPost("/createOrder", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext context, [FromBody] Order orderRequest) => {
+    var user = await userManager.GetUserAsync(httpContext.User);
+    if (user is null)
+    {
+        return Results.Unauthorized();
+    }
+
+    var foundUserId = user.Id;
+
+    var cart = await context.Carts.Include(c => c.CartItems).FirstOrDefaultAsync(c => c.UserId == foundUserId);
+    if (cart is null || !cart.CartItems.Any())
+    {
+        return Results.BadRequest("Cart is empty or not found.");
+    }
+
+    var order = new Order
+    {
+        UserId = foundUserId,
+        OrderDate = DateTime.UtcNow,
+        Location = orderRequest.Location,
+        City = orderRequest.City,
+        PhoneNumber = orderRequest.PhoneNumber,
+        TotalAmount = cart.CartItems.Sum(ci => ci.Quantity * ci.Price),
+        Status = OrderStatus.Pending
+    };
+
+    foreach (var cartItem in cart.CartItems)
+    {
+        order.OrderItems.Add(new OrderItem
+        {
+            ProductId = cartItem.ProductId,
+            ProductType = cartItem.ProductType,
+            Quantity = cartItem.Quantity,
+            Price = cartItem.Price,
+            Name = cartItem.Name,
+            ImageUrl = cartItem.ImageUrl
+        });
+    }
 
     context.Orders.Add(order);
+    context.CartItems.RemoveRange(cart.CartItems);
     await context.SaveChangesAsync();
+
     return Results.Ok(order);
-});
+}).RequireAuthorization();
+
 
 app.MapPut("/order/update/{id}", async (ModelsContext context, int id, OrderStatus status) =>
 {

@@ -51,8 +51,34 @@ export const updateCartItemQuantity = createAsyncThunk(
   }
 );
 
+export const getOrderTotal = createAsyncThunk("getOrderTotal", async () => {
+  const response = await fetch("http://localhost:5071/getOrderTotal", {
+    method: "GET",
+    credentials: "include",
+  });
+  return response.json();
+});
+
+export const createOrder = createAsyncThunk(
+  "createOrder",
+  async (orderDetails) => {
+    const response = await fetch("http://localhost:5071/createOrder", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(orderDetails),
+      credentials: "include",
+    });
+    return response.json();
+  }
+);
+
 const initialState = {
   cartItems: [],
+  placedOrders: [],
+  subTotal: 0,
+  orderTotal: 0,
   isLoading: null,
   error: false,
 };
@@ -96,7 +122,7 @@ export const ordersSlice = createSlice({
       state.error = true;
     });
 
-    // UPDATE CARTI ITEM QUANTITY
+    // UPDATE CART ITEM QUANTITY
     builder.addCase(updateCartItemQuantity.pending, (state) => {
       state.isLoading = true;
     });
@@ -105,6 +131,36 @@ export const ordersSlice = createSlice({
       state.cartItems = action.payload;
     });
     builder.addCase(updateCartItemQuantity.rejected, (state) => {
+      state.error = true;
+    });
+
+    // GET ORDER TOTAL
+    builder.addCase(getOrderTotal.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getOrderTotal.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.subTotal = action.payload.orderTotal;
+      state.orderTotal = action.payload.orderTotal + 1;
+      if (state.subTotal == 0) {
+        state.orderTotal = 0;
+      }
+    });
+    builder.addCase(getOrderTotal.rejected, (state) => {
+      state.error = true;
+    });
+
+    // PLACE ORDER
+    builder.addCase(createOrder.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(createOrder.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.cartItems = [];
+      state.orderTotal = 0;
+      state.placedOrders = action.payload;
+    });
+    builder.addCase(createOrder.rejected, (state) => {
       state.error = true;
     });
   },

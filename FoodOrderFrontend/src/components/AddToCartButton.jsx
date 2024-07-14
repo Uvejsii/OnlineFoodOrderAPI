@@ -1,10 +1,10 @@
 import { useDispatch } from "react-redux";
-import { addToCart } from "../features/orders/ordersSlice";
+import { addToCart, fetchAllCartItems } from "../features/orders/ordersSlice";
 
 const AddToCartButton = ({ product }) => {
   const dispatch = useDispatch();
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = async (product) => {
     const cartItem = {
       productId: product.id,
       productType: product.category,
@@ -14,12 +14,13 @@ const AddToCartButton = ({ product }) => {
       price: product.price,
     };
 
-    dispatch(addToCart(cartItem));
+    await dispatch(addToCart(cartItem));
+    await dispatch(fetchAllCartItems());
   };
 
   return (
     <button
-      className="btn btn-info w-100"
+      className="btn btn-info w-100 fw-semibold"
       onClick={() => handleAddToCart(product)}
     >
       Add To Cart

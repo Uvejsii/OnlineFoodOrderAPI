@@ -5,18 +5,39 @@ import EditDrinkForm from "../components/EditDrinkForm";
 import EditFoodForm from "../components/EditFoodForm";
 import FilterProducts from "../components/FilterProducts";
 import FoodListings from "../components/FoodListings";
-import { PlusCircleFill } from "react-bootstrap-icons";
+import { Cart2, PlusCircleFill } from "react-bootstrap-icons";
 import SearchProducts from "../components/SearchProducts";
 import { useState } from "react";
 import AuthorizeView, { AuthorizedUser } from "../components/AuthorizeView";
 import LogOutButton from "../components/LogOutButton";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchAllCartItems } from "../features/orders/ordersSlice";
 
 const AdminPage = () => {
   const [filteredProducts, setFilteredProducts] = useState({
     foods: [],
     drinks: [],
   });
+
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.orders.cartItems) || [];
+  const [cartQuantity, setCartQuantity] = useState(0);
+
+  useEffect(() => {
+    dispatch(fetchAllCartItems());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (Array.isArray(cartItems)) {
+      const totalCartQty = cartItems.reduce(
+        (acc, item) => acc + item.quantity,
+        0
+      );
+      setCartQuantity(totalCartQty);
+    }
+  }, [cartItems]);
 
   return (
     <AuthorizeView>
@@ -28,7 +49,10 @@ const AdminPage = () => {
             <AuthorizedUser value="email" />
           </span>
         </h5>
-        <Link to="/cart">Cart</Link>
+        <Link to="/cart" className="fs-1">
+          <Cart2 />
+        </Link>
+        {cartQuantity}
         <div className="d-flex justify-content-end mb-3">
           <LogOutButton />
         </div>
