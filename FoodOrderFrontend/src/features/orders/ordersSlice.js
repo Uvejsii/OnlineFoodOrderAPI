@@ -62,21 +62,41 @@ export const getOrderTotal = createAsyncThunk("getOrderTotal", async () => {
 export const createOrder = createAsyncThunk(
   "createOrder",
   async (orderDetails) => {
-    const response = await fetch("http://localhost:5071/createOrder", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(orderDetails),
-      credentials: "include",
-    });
+    const queryString = new URLSearchParams(orderDetails).toString();
+    const response = await fetch(
+      `http://localhost:5071/createOrder?${queryString}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(orderDetails),
+      }
+    );
     return response.json();
   }
 );
 
+export const getOrders = createAsyncThunk("getOrders", async () => {
+  const response = await fetch("http://localhost:5071/getOrdersForAdmin", {
+    method: "GET",
+  });
+  return response.json();
+});
+
+export const getOrderItems = createAsyncThunk("getOrderItems", async () => {
+  const response = await fetch("http://localhost:5071/getOrderItemsForAdmin", {
+    method: "GET",
+  });
+  return response.json();
+});
+
 const initialState = {
   cartItems: [],
   placedOrders: [],
+  adminOrders: [],
+  adminOrderItems: [],
   subTotal: 0,
   orderTotal: 0,
   isLoading: null,
@@ -156,11 +176,39 @@ export const ordersSlice = createSlice({
     });
     builder.addCase(createOrder.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.cartItems = [];
+      state.cartItems = 0;
       state.orderTotal = 0;
+      state.placedOrders = state.placedOrders || [];
       state.placedOrders = action.payload;
+      console.log(action.payload);
     });
     builder.addCase(createOrder.rejected, (state) => {
+      state.error = true;
+    });
+
+    // GET ORDERS
+    builder.addCase(getOrders.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getOrders.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.adminOrders = action.payload;
+      console.log(action.payload);
+    });
+    builder.addCase(getOrders.rejected, (state) => {
+      state.error = true;
+    });
+
+    // GET ORDER ITEMS
+    builder.addCase(getOrderItems.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getOrderItems.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.adminOrderItems = action.payload;
+      console.log(action.payload);
+    });
+    builder.addCase(getOrderItems.rejected, (state) => {
       state.error = true;
     });
   },

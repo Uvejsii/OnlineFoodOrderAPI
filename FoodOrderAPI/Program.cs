@@ -1,4 +1,3 @@
-using System.Net;
 using FoodOrderAPI.DatabaseContext;
 using FoodOrderAPI.DatabaseContext.Models.Products;
 using FoodOrderAPI.DatabaseContext.Models.Users;
@@ -6,9 +5,18 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using FoodOrderAPI.DatabaseContext.Models.Orders;
-using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+builder.Services.AddControllers();
+
 builder.Services.AddDbContext<ModelsContext>();
 
 builder.Services.AddAuthorization();
@@ -26,8 +34,15 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapControllers();
 app.MapIdentityApi<ApplicationUser>();
 app.UseCors("AllowFrontend");
 
@@ -341,7 +356,8 @@ app.MapGet("/getOrderTotal", async (HttpContext httpContext, UserManager<Applica
     return Results.Ok(new {OrderTotal = orderTotal});
 }).RequireAuthorization();
 
-app.MapPost("/createOrder", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext context, [FromBody] Order orderRequest) => {
+app.MapPost("/createOrder", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext context) =>
+{
     var user = await userManager.GetUserAsync(httpContext.User);
     if (user is null)
     {
@@ -349,6 +365,15 @@ app.MapPost("/createOrder", async (HttpContext httpContext, UserManager<Applicat
     }
 
     var foundUserId = user.Id;
+    
+    var location = httpContext.Request.Query["location"].ToString();
+    var city = httpContext.Request.Query["city"].ToString();
+    var phoneNumber = httpContext.Request.Query["phoneNumber"].ToString();
+    
+    if (string.IsNullOrEmpty(location) || string.IsNullOrEmpty(city) || string.IsNullOrEmpty(phoneNumber))
+    {
+        return Results.BadRequest("Missing order details.");
+    }
 
     var cart = await context.Carts.Include(c => c.CartItems).FirstOrDefaultAsync(c => c.UserId == foundUserId);
     if (cart is null || !cart.CartItems.Any())
@@ -360,11 +385,12 @@ app.MapPost("/createOrder", async (HttpContext httpContext, UserManager<Applicat
     {
         UserId = foundUserId,
         OrderDate = DateTime.UtcNow,
-        Location = orderRequest.Location,
-        City = orderRequest.City,
-        PhoneNumber = orderRequest.PhoneNumber,
+        Location = location,
+        City = city,
+        PhoneNumber = phoneNumber,
         TotalAmount = cart.CartItems.Sum(ci => ci.Quantity * ci.Price),
-        Status = OrderStatus.Pending
+        Status = OrderStatus.Pending,
+        OrderItems = new List<OrderItem>()
     };
 
     foreach (var cartItem in cart.CartItems)
@@ -384,8 +410,31 @@ app.MapPost("/createOrder", async (HttpContext httpContext, UserManager<Applicat
     context.CartItems.RemoveRange(cart.CartItems);
     await context.SaveChangesAsync();
 
-    return Results.Ok(order);
+    // Map to DTO
+    var orderDto = new OrderDto
+    {
+        Id = order.Id,
+        // OrderNumber = order.OrderNumber,
+        OrderDate = order.OrderDate,
+        Location = order.Location,
+        City = order.City,
+        PhoneNumber = order.PhoneNumber,
+        TotalAmount = order.TotalAmount,
+        Status = order.Status,
+        OrderItems = order.OrderItems.Select(oi => new OrderItemDto
+        {
+            ProductId = oi.ProductId,
+            ProductType = oi.ProductType,
+            Quantity = oi.Quantity,
+            Price = oi.Price,
+            Name = oi.Name,
+            ImageUrl = oi.ImageUrl
+        }).ToList()
+    };
+
+    return Results.Ok(orderDto);
 }).RequireAuthorization();
+
 
 
 app.MapPut("/order/update/{id}", async (ModelsContext context, int id, OrderStatus status) =>
@@ -408,14 +457,59 @@ app.MapGet("/order/user/{userId}", async (ModelsContext context, string userId) 
     return Results.Ok(orders);
 });
 
-app.MapGet("/admin/orders", async (ModelsContext context) =>
+app.MapGet("/getOrdersForAdmin", async (ModelsContext context, ILogger<Program> logger) =>
 {
-    var orders = await context.Orders
-        .Include(o => o.User)
-        .Include(o => o.OrderItems)
-        .ToListAsync();
-    
-    return Results.Ok(orders);
+    try
+    {
+        var orders = await context.Orders
+            .Include(o => o.OrderItems)
+            .ToListAsync();
+
+        // Map to DTOs
+        var orderDtos = orders.Select(o => new OrderDto
+        {
+            Id = o.Id,
+            OrderDate = o.OrderDate,
+            Location = o.Location,
+            City = o.City,
+            PhoneNumber = o.PhoneNumber,
+            TotalAmount = o.TotalAmount,
+            Status = o.Status,
+            OrderItems = o.OrderItems.Select(oi => new OrderItemDto
+            {
+                ProductId = oi.ProductId,
+                ProductType = oi.ProductType,
+                Quantity = oi.Quantity,
+                Price = oi.Price,
+                Name = oi.Name,
+                ImageUrl = oi.ImageUrl
+            }).ToList()
+        }).ToList();
+
+        return Results.Ok(orderDtos);
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred while fetching orders.");
+        return Results.Problem("An internal server error occurred.", statusCode: 500);
+    }
 });
+
+
+app.MapGet("/getOrderItemsForAdmin", async (ModelsContext context, ILogger<Program> logger) =>
+{
+    try
+    {
+        var orderItems = await context.OrderItems.ToListAsync();
+
+        return Results.Ok(orderItems);
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred while fetching order items.");
+        return Results.Problem($"An internal server error occurred.", statusCode: 500);
+    }
+});
+
 
 app.Run();

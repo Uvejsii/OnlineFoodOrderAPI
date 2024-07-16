@@ -34,14 +34,7 @@ namespace FoodOrderAPI.DatabaseContext
             // Order to ApplicationUser relationship
             builder.Entity<Order>()
                 .HasOne(o => o.User)
-                .WithMany()
-                .HasForeignKey(o => o.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // Order to ApplicationUser relationship
-            builder.Entity<Order>()
-                .HasOne(o => o.User)
-                .WithMany()
+                .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -51,7 +44,14 @@ namespace FoodOrderAPI.DatabaseContext
                 .WithMany()
                 .HasForeignKey(c => c.UserId) // Use UserId directly here
                 .OnDelete(DeleteBehavior.Cascade);
-        }
+
+            // Configure the relationship between User and Orders
+            builder.Entity<ApplicationUser>()
+                .HasMany(u => u.Orders)         // ApplicationUser has many Orders
+                .WithOne(o => o.User)           // Order has one User
+                .HasForeignKey(o => o.UserId)  // Foreign key property in Order
+                .OnDelete(DeleteBehavior.Cascade); // Define delete behavior if needed
+                }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

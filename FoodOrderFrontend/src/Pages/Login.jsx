@@ -55,7 +55,6 @@ const Login = () => {
       })
         .then((data) => {
           // handle success or error from the server
-          console.log(data);
           if (data.ok) {
             setError("Successful Login.");
             // window.location.href = "/admin";

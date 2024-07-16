@@ -166,3 +166,12 @@ C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI\obj\Debug\net8.0\refint\FoodOrderA
 C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI\obj\Debug\net8.0\FoodOrderAPI.pdb
 C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI\obj\Debug\net8.0\FoodOrderAPI.genruntimeconfig.cache
 C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI\obj\Debug\net8.0\ref\FoodOrderAPI.dll
+C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI\bin\Debug\net8.0\Serilog.dll
+C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI\bin\Debug\net8.0\Serilog.AspNetCore.dll
+C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI\bin\Debug\net8.0\Serilog.Extensions.Hosting.dll
+C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI\bin\Debug\net8.0\Serilog.Extensions.Logging.dll
+C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI\bin\Debug\net8.0\Serilog.Formatting.Compact.dll
+C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI\bin\Debug\net8.0\Serilog.Settings.Configuration.dll
+C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI\bin\Debug\net8.0\Serilog.Sinks.Console.dll
+C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI\bin\Debug\net8.0\Serilog.Sinks.Debug.dll
+C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI\bin\Debug\net8.0\Serilog.Sinks.File.dll

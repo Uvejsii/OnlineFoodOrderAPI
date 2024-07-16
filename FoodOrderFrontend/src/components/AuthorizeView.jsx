@@ -10,9 +10,9 @@ function AuthorizeView(props) {
   const [user, setUser] = useState(emptyUser);
 
   useEffect(() => {
-    let retryCount = 0;
-    const maxRetries = 5;
-    const delay = 1000;
+    // let retryCount = 0;
+    // const maxRetries = 0;
+    const delay = 20;
 
     function wait(delay) {
       return new Promise((resolve) => setTimeout(resolve, delay));
@@ -33,13 +33,7 @@ function AuthorizeView(props) {
           throw new Error("" + response.status);
         }
       } catch (error) {
-        retryCount++;
-        if (retryCount > maxRetries) {
-          throw error;
-        } else {
-          await wait(delay);
-          return fetchWithRetry(url, options);
-        }
+        throw error;
       }
     }
 
