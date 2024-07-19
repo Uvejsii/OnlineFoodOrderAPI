@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createOrder,
   fetchAllCartItems,
   getOrderTotal,
 } from "../features/orders/ordersSlice";
-import HandleIncrementButton from "./HandleIncrementButton";
-import HandleDecrementButton from "./HandleDecrementButton";
-import HandleRemoveCartItemButton from "./handleRemoveCartItemButton";
+import ProductsAddedToCart from "./ProductsAddedToCart";
+import PlaceOrderForm from "./PlaceOrderForm";
+import PaymentSummary from "./PaymentSummary";
 
 const CartItems = () => {
   const dispatch = useDispatch();
@@ -42,6 +43,11 @@ const CartItems = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createOrder(orderFormData));
+    setOrderFormData({
+      location: "",
+      city: "",
+      phoneNumber: "",
+    });
   };
 
   if (isLoading) {
@@ -54,76 +60,26 @@ const CartItems = () => {
 
   return (
     <>
-      <div className="d-flex gap-5 flex-wrap">
-        {cartItems.length > 0 ? (
-          cartItems.map((item, index) => (
-            <div key={index} className="border p-2">
-              <p>ID: {item.productId}</p>
-              <img src={item.imageUrl} alt={`${item.name} image`} />
-              <h5>{item.name}</h5>
-              <p>€ {item.price.toFixed(2)}</p>
-              <div className="d-flex align-items-center">
-                <span className="me-2">QTY:</span>
-                <HandleDecrementButton product={item} />
-                <p className="m-0 mx-2 fw-semibold">{item.quantity}</p>
-                <HandleIncrementButton product={item} />
-              </div>
-              <p>Type: {item.productType}</p>
-              <HandleRemoveCartItemButton product={item} />
-            </div>
-          ))
-        ) : (
-          <p>No items in the cart.</p>
-        )}
-      </div>
+      {cartItems.length > 0 ? (
+        <div className="d-flex gap-5 flex-wrap">
+          {cartItems.map((item, index) => (
+            <ProductsAddedToCart key={item.id || index} item={item} />
+          ))}
+        </div>
+      ) : (
+        <p>
+          No items in the cart, click <Link to="/orderStatus">here</Link> to
+          view your last order status
+        </p>
+      )}
       <div className="order d-flex gap-5 mt-5">
-        <div>
-          <form className="d-flex flex-column gap-3" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              placeholder="Location"
-              className="form-control"
-              name="location"
-              required
-              value={orderFormData.location}
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              placeholder="City"
-              className="form-control"
-              name="city"
-              required
-              value={orderFormData.city}
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              placeholder="Phone Number"
-              className="form-control"
-              name="phoneNumber"
-              required
-              value={orderFormData.phoneNumber}
-              onChange={handleChange}
-            />
-            <button
-              type="submit"
-              className="btn btn-success fw-semibold w-100"
-              disabled={orderTotal < 5 ? true : null}
-            >
-              Place Order
-            </button>
-          </form>
-        </div>
-        <div className="border">
-          <h4 className="text-primary">
-            Sub Total: € {subTotal !== undefined ? subTotal.toFixed(2) : "0.00"}
-          </h4>
-          <h6>Transport: € {subTotal > 0 ? "1.00" : "0.00"} </h6>
-          <h4>Total: € {orderTotal.toFixed(2)}</h4>
-          <hr />
-          <h6>Minimum order € 5.00</h6>
-        </div>
+        <PlaceOrderForm
+          handleSubmit={handleSubmit}
+          orderFormData={orderFormData}
+          handleChange={handleChange}
+          orderTotal={orderTotal}
+        />
+        <PaymentSummary subTotal={subTotal} orderTotal={orderTotal} />
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 namespace FoodOrderAPI.DatabaseContext.Models.Orders
 {
-    public class OrderDto
+    public class UserOrderDetailsDto
     {
         public int Id { get; set; }
         public DateTime OrderDate { get; set; }

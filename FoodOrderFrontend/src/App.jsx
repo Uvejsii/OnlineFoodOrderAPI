@@ -17,6 +17,7 @@ import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import Cart from "./Pages/Cart";
 import AdminOrdersPage from "./Pages/AdminOrdersPage";
+import OrderStatusPage from "./Pages/OrderStatusPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -29,6 +30,7 @@ const router = createBrowserRouter(
       <Route path="/drink/:drinkId" element={<DrinkDetail />}></Route>
       <Route path="/cart" element={<Cart />}></Route>
       <Route path="/adminOrders" element={<AdminOrdersPage />}></Route>
+      <Route path="/orderStatus" element={<OrderStatusPage />}></Route>
       <Route path="*" element={<NotFound />}></Route>
     </Route>
   )
