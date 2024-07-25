@@ -87,3 +87,13 @@
 .contant_box_404 {
   margin-top: -50px;
 }
+
+/* ADMIN ORDERS PAGE */
+
+.three-dots-vertical-icon {
+  cursor: pointer;
+}
+
+.caret-left-fill-icon {
+  color: rgb(233, 236, 239);
+}

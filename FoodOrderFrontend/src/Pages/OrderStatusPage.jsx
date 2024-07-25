@@ -13,6 +13,12 @@ const OrderStatusPage = () => {
     dispatch(getLastOrder());
   }, [dispatch]);
 
+  // useEffect(() => {
+  //   if (lastOrder && lastOrder.status !== undefined) {
+  //     console.log("Order Status", lastOrder.status);
+  //   }
+  // }, [lastOrder]);
+
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -25,12 +31,48 @@ const OrderStatusPage = () => {
     return <p>No last order found.</p>;
   }
 
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  const orderStatusToText = (orderStatus) => {
+    switch (orderStatus) {
+      case 0:
+        return "Pending";
+      case 1:
+        return "Preparing";
+      case 2:
+        return "Underway";
+      case 3:
+        return "Delivered";
+      default:
+        return "Unknown Status";
+    }
+  };
+
   return (
     <div className="container">
       <GoToAdminPageButton />
       <div>
-        <h6>Order Status: {lastOrder.status}</h6>
-        <h6>Ordered On: {lastOrder.orderDate}</h6>
+        <h6>
+          Order Status:{" "}
+          <span className="text-success fw-bold">
+            {lastOrder.status !== undefined
+              ? orderStatusToText(lastOrder.status)
+              : "N/A"}
+          </span>
+        </h6>
+        <h6>
+          Ordered On:{" "}
+          {lastOrder.orderDate ? formatDate(lastOrder.orderDate) : "N/A"}
+        </h6>
         <h6>City: {lastOrder.city}</h6>
         <h5>Location: {lastOrder.location}</h5>
         <h6>Total: € {lastOrder.totalAmount.toFixed(2)}</h6>
@@ -42,7 +84,7 @@ const OrderStatusPage = () => {
             <div key={index}>
               <img src={item.imageUrl} alt="" />
               <p>{item.name}</p>
-              <p>Qty: {item.quantity}</p>
+              <p>Qty: x{item.quantity}</p>
               <p>€ {item.price.toFixed(2)}</p>
             </div>
           ))}

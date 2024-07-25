@@ -18,6 +18,10 @@ import Register from "./Pages/Register";
 import Cart from "./Pages/Cart";
 import AdminOrdersPage from "./Pages/AdminOrdersPage";
 import OrderStatusPage from "./Pages/OrderStatusPage";
+import "primereact/resources/themes/saga-blue/theme.css";
+import "primereact/resources/primereact.min.css";
+
+// import { PrimeReactProvider, PrimeReactContext } from "primereact/api";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

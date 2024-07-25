@@ -53,9 +53,10 @@ const AdminPage = () => {
           <Cart2 />
         </Link>
         {cartQuantity}
-        <Link to="/adminOrders" className="ms-5">
+        <Link to="/adminOrders" className="mx-5">
           Orders
         </Link>
+        <Link to="/orderStatus">Order Status</Link>
         <div className="d-flex justify-content-end mb-3">
           <LogOutButton />
         </div>

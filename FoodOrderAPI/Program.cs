@@ -545,4 +545,23 @@ app.MapGet("/getLastOrder", async (HttpContext httpContext, UserManager<Applicat
     return Results.Ok(userOrderDetailsDto);
 }).RequireAuthorization();
 
+app.MapPut("/editOrderStatus/{orderId}/{newStatus}", async (ModelsContext context, int orderId, int newStatus) => {
+    var order = await context.Orders.FindAsync(orderId);
+    if (order is null)
+    {
+        return Results.NotFound("Order not found");
+    }
+
+    if (!Enum.IsDefined(typeof(OrderStatus), newStatus))
+    {
+        return Results.BadRequest("Invalid status value");
+    }
+
+    order.Status = (OrderStatus)newStatus;
+
+    await context.SaveChangesAsync();
+
+    return Results.Ok(await context.Orders.ToListAsync());
+}).RequireAuthorization();
+
 app.Run();

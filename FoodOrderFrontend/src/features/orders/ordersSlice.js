@@ -93,6 +93,20 @@ export const getLastOrder = createAsyncThunk("getLastOrder", async () => {
   return response.json();
 });
 
+export const editOrderStatus = createAsyncThunk(
+  "editOrderStatus",
+  async ({ orderId, newStatus }) => {
+    const response = await fetch(
+      `http://localhost:5071/editOrderStatus/${orderId}/${newStatus}`,
+      {
+        method: "PUT",
+        credentials: "include",
+      }
+    );
+    return response.json();
+  }
+);
+
 const initialState = {
   cartItems: [],
   placedOrders: [],
@@ -193,6 +207,7 @@ export const ordersSlice = createSlice({
     builder.addCase(getOrders.fulfilled, (state, action) => {
       state.isLoading = false;
       state.adminOrders = action.payload;
+      console.log(action.payload);
     });
     builder.addCase(getOrders.rejected, (state) => {
       state.error = true;
@@ -205,9 +220,21 @@ export const ordersSlice = createSlice({
     builder.addCase(getLastOrder.fulfilled, (state, action) => {
       state.isLoading = false;
       state.lastOrder = action.payload;
-      console.log(action.payload);
+      // console.log(action.payload);
     });
     builder.addCase(getLastOrder.rejected, (state) => {
+      state.error = true;
+    });
+
+    // EDIT ORDER STATUS
+    builder.addCase(editOrderStatus.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(editOrderStatus.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.adminOrders = action.payload;
+    });
+    builder.addCase(editOrderStatus.rejected, (state) => {
       state.error = true;
     });
   },
