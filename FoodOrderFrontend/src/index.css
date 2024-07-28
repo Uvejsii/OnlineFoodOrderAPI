@@ -97,3 +97,74 @@
 .caret-left-fill-icon {
   color: rgb(233, 236, 239);
 }
+
+/* Product card styles */
+.card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card img {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.card img:hover {
+  transform: scale(1.05);
+}
+
+.card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Button styles */
+.btn {
+  border-radius: 25px;
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+}
+
+.btn-danger {
+  background-color: #ff4c4c; /* More vibrant red */
+  border: 1px solid #e04343;
+}
+
+.btn-danger:hover {
+  background-color: #e04343;
+}
+
+.btn-warning {
+  background-color: #ffa500; /* Orange */
+  border: 1px solid #e04343;
+}
+
+.btn-warning:hover {
+  background-color: #e59400;
+}
+
+.btn-info {
+  background-color: #00c4cc; /* More vibrant blue */
+  border: none;
+}
+
+.btn-info:hover {
+  background-color: #00a5a8;
+}

@@ -546,7 +546,9 @@ app.MapGet("/getLastOrder", async (HttpContext httpContext, UserManager<Applicat
 }).RequireAuthorization();
 
 app.MapPut("/editOrderStatus/{orderId}/{newStatus}", async (ModelsContext context, int orderId, int newStatus) => {
-    var order = await context.Orders.FindAsync(orderId);
+    var order = await context.Orders
+        .Include(o => o.OrderItems)
+        .FirstOrDefaultAsync(o => o.Id == orderId);
     if (order is null)
     {
         return Results.NotFound("Order not found");
@@ -558,10 +560,34 @@ app.MapPut("/editOrderStatus/{orderId}/{newStatus}", async (ModelsContext contex
     }
 
     order.Status = (OrderStatus)newStatus;
-
     await context.SaveChangesAsync();
 
-    return Results.Ok(await context.Orders.ToListAsync());
+    var orders = await context.Orders
+        .Include(o => o.OrderItems)
+        .ToListAsync();
+
+    var orderDtos = orders.Select(o => new OrderDto
+    {
+        Id = o.Id,
+        OrderDate = o.OrderDate,
+        Location = o.Location,
+        City = o.City,
+        PhoneNumber = o.PhoneNumber,
+        TotalAmount = o.TotalAmount,
+        Status = o.Status,
+        UserEmail = o.UserEmail,
+        OrderItems = o.OrderItems.Select(oi => new OrderItemDto
+        {
+            ProductId = oi.ProductId,
+            ProductType = oi.ProductType,
+            Quantity = oi.Quantity,
+            Price = oi.Price,
+            Name = oi.Name,
+            ImageUrl = oi.ImageUrl
+        }).ToList()
+    }).ToList();
+
+    return Results.Ok(orderDtos);
 }).RequireAuthorization();
 
 app.Run();

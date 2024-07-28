@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
 
 export const addToCart = createAsyncThunk("addToCart", async (cartItem) => {
   const response = await fetch("http://localhost:5071/addToCart", {

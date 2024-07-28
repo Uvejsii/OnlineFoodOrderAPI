@@ -1,0 +1,6 @@
+2024-07-28 15:21:36.221 +02:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2024-07-28 15:21:36.285 +02:00 [INF] User profile is available. Using 'C:\Users\Admin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-07-28 15:21:36.537 +02:00 [INF] Now listening on: http://localhost:5071
+2024-07-28 15:21:36.545 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-07-28 15:21:36.548 +02:00 [INF] Hosting environment: Development
+2024-07-28 15:21:36.552 +02:00 [INF] Content root path: C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI

@@ -1,6 +1,33 @@
 import AddToCartButton from "./AddToCartButton";
 import DeleteDrinkButton from "./DeleteDrinkButton";
 import EditDrinkButton from "./EditDrinkButton";
+import styled from "styled-components";
+import { motion } from "framer-motion";
+
+const Card = styled(motion.div)`
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+const CardBody = styled.div`
+  padding: 15px;
+`;
+
+const CardFooter = styled.div`
+  padding: 10px;
+  background-color: #ffba39d8;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+`;
 
 const DrinkListing = ({ drink, goToDrink, isHomePage }) => {
   const onGoToDrink = (drinkId) => {
@@ -8,26 +35,34 @@ const DrinkListing = ({ drink, goToDrink, isHomePage }) => {
   };
 
   return (
-    <div className="col">
-      <div className="card drink-card">
+    <motion.div
+      className="col-xl-3 col-lg-3"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <Card>
         <img
           src={drink.imageUrl}
           alt={`${drink.name} image`}
           className="card-img-top img-fluid"
-          onClick={() => {
-            onGoToDrink(drink.id);
+          onClick={() => onGoToDrink(drink.id)}
+          style={{
+            cursor: "pointer",
+            borderTopLeftRadius: "10px",
+            borderTopRightRadius: "10px",
           }}
         />
-        <div className="card-body">
+        <CardBody>
           <h5
-            onClick={() => {
-              onGoToDrink(drink.id);
-            }}
+            onClick={() => onGoToDrink(drink.id)}
+            style={{ cursor: "pointer" }}
+            className="card-title"
           >
             {drink.name}
           </h5>
-        </div>
-        <div className="card-footer d-flex justify-content-center gap-3">
+        </CardBody>
+        <CardFooter>
           {isHomePage ? (
             <div className="d-flex flex-column w-100">
               <div className="d-flex justify-content-between w-100 fs-5 fw-semibold">
@@ -35,7 +70,7 @@ const DrinkListing = ({ drink, goToDrink, isHomePage }) => {
                 <p className="m-0">Rating {drink.rating}</p>
               </div>
               <div className="d-flex mt-1">
-                <AddToCartButton product={drink} />
+                <AddToCartButton product={drink} isHomePage={isHomePage} />
               </div>
             </div>
           ) : (
@@ -49,9 +84,9 @@ const DrinkListing = ({ drink, goToDrink, isHomePage }) => {
               </div>
             </div>
           )}
-        </div>
-      </div>
-    </div>
+        </CardFooter>
+      </Card>
+    </motion.div>
   );
 };
 

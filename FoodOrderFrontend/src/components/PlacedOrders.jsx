@@ -118,6 +118,7 @@ const PlacedOrders = () => {
 
   const updateOrderStatus = (orderId, newStatus) => {
     dispatch(editOrderStatus({ orderId, newStatus }));
+    setShowStatusAction(false);
   };
 
   const renderHeader = () => (

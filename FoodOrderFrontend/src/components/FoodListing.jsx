@@ -1,6 +1,34 @@
+import AddToCartButton from "./AddToCartButton";
 import DeleteFoodButton from "./DeleteFoodButton";
 import EditFoodButton from "./EditFoodButton";
-import AddToCartButton from "./AddToCartButton";
+import styled from "styled-components";
+import { motion } from "framer-motion";
+import "/src/productDetail.css";
+
+const Card = styled(motion.div)`
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+const CardBody = styled.div`
+  padding: 15px;
+`;
+
+const CardFooter = styled.div`
+  padding: 10px;
+  background-color: #ffba39c3;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+`;
 
 const FoodListing = ({ food, goToFood, isHomePage }) => {
   const onGoToFood = (foodId) => {
@@ -8,141 +36,59 @@ const FoodListing = ({ food, goToFood, isHomePage }) => {
   };
 
   return (
-    <>
-      <div className="col">
-        <div className="card food-card">
-          <img
-            src={food.imageUrl}
-            alt={`${food.name} image`}
-            className="card-img-top img-fluid"
-            onClick={() => {
-              onGoToFood(food.id);
-            }}
-          />
-          <div className="card-body">
-            <h5
-              onClick={() => {
-                onGoToFood(food.id);
-              }}
-            >
-              {food.name}
-            </h5>
-          </div>
-          <div className="card-footer d-flex justify-content-between gap-3">
-            {isHomePage ? (
-              <div className="d-flex flex-column gap-2 w-100">
-                <div className="d-flex justify-content-between w-100 fs-5 fw-semibold">
-                  <p className="m-0">€ {food.price.toFixed(2)}</p>
-                  <p className="m-0">Rating {food.rating}</p>
-                </div>
-                <div className="d-flex">
-                  <AddToCartButton product={food} />
-                </div>
+    <motion.div
+      className="col-xl-3 col-lg-3"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <Card>
+        <img
+          src={food.imageUrl}
+          alt={`${food.name} image`}
+          className="card-img-top img-fluid"
+          onClick={() => onGoToFood(food.id)}
+          style={{
+            cursor: "pointer",
+            borderTopLeftRadius: "10px",
+            borderTopRightRadius: "10px",
+          }}
+        />
+        <CardBody>
+          <h5
+            onClick={() => onGoToFood(food.id)}
+            style={{ cursor: "pointer" }}
+            className="card-title"
+          >
+            {food.name}
+          </h5>
+        </CardBody>
+        <CardFooter>
+          {isHomePage ? (
+            <div className="d-flex flex-column w-100">
+              <div className="d-flex justify-content-between w-100 fs-5 fw-semibold">
+                <p className="m-0">€ {food.price.toFixed(2)}</p>
+                <p className="m-0">Rating {food.rating}</p>
               </div>
-            ) : (
-              <div className="d-flex flex-column gap-2 w-100">
-                <div className="d-flex gap-3 w-100">
-                  <DeleteFoodButton food={food} />
-                  <EditFoodButton food={food} />
-                </div>
-                <div>
-                  <AddToCartButton product={food} />
-                </div>
+              <div className="d-flex mt-1">
+                <AddToCartButton product={food} isHomePage={isHomePage} />
               </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </>
+            </div>
+          ) : (
+            <div className="d-flex flex-column gap-2 w-100">
+              <div className="d-flex gap-3 w-100">
+                <DeleteFoodButton food={food} />
+                <EditFoodButton food={food} />
+              </div>
+              <div className="d-flex">
+                <AddToCartButton product={food} />
+              </div>
+            </div>
+          )}
+        </CardFooter>
+      </Card>
+    </motion.div>
   );
 };
 
 export default FoodListing;
-
-// import DeleteFoodButton from "./DeleteFoodButton";
-// import EditFoodButton from "./EditFoodButton";
-
-// const FoodListing = ({ food, goToFood, isHomePage }) => {
-//   const onGoToFood = (foodId) => {
-//     goToFood(foodId);
-//   };
-
-//   const addToCart = async (food) => {
-//     const orderItem = {
-//       // orderId: 1,
-//       productId: food.id,
-//       productName: food.name,
-//       price: food.price,
-//       quantity: 1, // default quantity
-//       productType: "Food", // assuming this is a food item
-//     };
-
-//     try {
-//       const response = await fetch("http://localhost:5071/addToCart", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(orderItem),
-//       });
-
-//       if (response.ok) {
-//         alert("Item added to cart successfully!");
-//       } else {
-//         const errorMessage = await response.text();
-//         console.log(errorMessage);
-//         alert(`Failed to add item to cart: ${errorMessage}`);
-//       }
-//     } catch (error) {
-//       console.error("Error adding to cart:", error);
-//       alert("Error adding to cart");
-//     }
-//   };
-
-//   return (
-//     <>
-//       <div className="col">
-//         <div className="card food-card">
-//           <img
-//             src={food.imageUrl}
-//             alt={`${food.name} image`}
-//             className="card-img-top img-fluid"
-//             onClick={() => {
-//               onGoToFood(food.id);
-//             }}
-//           />
-//           <div className="card-body">
-//             <h5
-//               onClick={() => {
-//                 onGoToFood(food.id);
-//               }}
-//             >
-//               {food.name}
-//             </h5>
-//           </div>
-//           <div className="card-footer d-flex justify-content-between gap-3">
-//             {isHomePage ? (
-//               <div className="d-flex justify-content-between w-100 fs-5 fw-semibold">
-//                 <p className="m-0">€ {food.price.toFixed(2)}</p>
-//                 <p className="m-0">Rating {food.rating}</p>
-//                 <button
-//                   className="btn btn-primary"
-//                   onClick={() => addToCart(food)}
-//                 >
-//                   Add to Cart
-//                 </button>
-//               </div>
-//             ) : (
-//               <>
-//                 <DeleteFoodButton food={food} />
-//                 <EditFoodButton food={food} />
-//               </>
-//             )}
-//           </div>
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default FoodListing;

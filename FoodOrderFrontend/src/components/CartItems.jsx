@@ -9,6 +9,8 @@ import {
 import ProductsAddedToCart from "./ProductsAddedToCart";
 import PlaceOrderForm from "./PlaceOrderForm";
 import PaymentSummary from "./PaymentSummary";
+import { motion } from "framer-motion";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const CartItems = () => {
   const dispatch = useDispatch();
@@ -59,29 +61,48 @@ const CartItems = () => {
   }
 
   return (
-    <>
+    <div className="container my-4">
       {cartItems.length > 0 ? (
-        <div className="d-flex gap-5 flex-wrap">
+        <motion.div
+          className="d-flex flex-wrap gap-4 justify-content-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
           {cartItems.map((item, index) => (
             <ProductsAddedToCart key={item.id || index} item={item} />
           ))}
-        </div>
+        </motion.div>
       ) : (
         <p>
           No items in the cart, click <Link to="/orderStatus">here</Link> to
           view your last order status
         </p>
       )}
-      <div className="order d-flex gap-5 mt-5">
-        <PlaceOrderForm
-          handleSubmit={handleSubmit}
-          orderFormData={orderFormData}
-          handleChange={handleChange}
-          orderTotal={orderTotal}
-        />
-        <PaymentSummary subTotal={subTotal} orderTotal={orderTotal} />
+      <div className="order d-flex flex-column flex-md-row gap-5 mt-5">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex-grow-1"
+        >
+          <PlaceOrderForm
+            handleSubmit={handleSubmit}
+            orderFormData={orderFormData}
+            handleChange={handleChange}
+            orderTotal={orderTotal}
+          />
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="flex-grow-1"
+        >
+          <PaymentSummary subTotal={subTotal} orderTotal={orderTotal} />
+        </motion.div>
       </div>
-    </>
+    </div>
   );
 };
 

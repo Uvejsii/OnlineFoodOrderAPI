@@ -1,7 +1,8 @@
 import { useDispatch } from "react-redux";
 import { addToCart, fetchAllCartItems } from "../features/orders/ordersSlice";
+import "/src/productDetail.css";
 
-const AddToCartButton = ({ product }) => {
+const AddToCartButton = ({ product, isHomePage }) => {
   const dispatch = useDispatch();
 
   const handleAddToCart = async (product) => {
@@ -20,7 +21,7 @@ const AddToCartButton = ({ product }) => {
 
   return (
     <button
-      className="btn btn-info w-100 fw-semibold"
+      className={isHomePage ? "home-add-to-cart-btn w-100" : "add-to-cart-btn"}
       onClick={() => handleAddToCart(product)}
     >
       Add To Cart
