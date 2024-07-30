@@ -149,6 +149,7 @@
   background-color: #ff6536;
   box-shadow: 2px 2px 25px -7px #ff6536;
   cursor: pointer;
+  transition: ease-in-out 0.2s;
 }
 
 .add-to-cart-btn {
@@ -162,8 +163,21 @@
   background-color: #ff6536;
   box-shadow: 2px 2px 25px -7px #ff6536;
   cursor: pointer;
+  transition: ease-in-out 0.2s;
+}
+
+.home-add-to-cart-btn:hover {
+  background-color: #fa754dd7;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #fa754dd7;
 }
 
 .add-to-cart-btn:active {
+  transform: scale(0.97);
+}
+
+.home-add-to-cart-btn:active {
   transform: scale(0.97);
 }

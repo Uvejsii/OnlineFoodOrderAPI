@@ -1,5 +1,7 @@
 import { useDispatch } from "react-redux";
 import { removeFromCart } from "../features/orders/ordersSlice";
+import { toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const HandleRemoveCartItemButton = ({ product }) => {
   const dispatch = useDispatch();
@@ -11,6 +13,18 @@ const HandleRemoveCartItemButton = ({ product }) => {
         productType: product.productType,
       })
     );
+
+    toast.success("Removed From Cart!", {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
   };
   return (
     <button

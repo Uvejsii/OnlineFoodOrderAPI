@@ -1,6 +1,8 @@
 import { useDispatch } from "react-redux";
 import { addToCart, fetchAllCartItems } from "../features/orders/ordersSlice";
 import "/src/productDetail.css";
+import { toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddToCartButton = ({ product, isHomePage }) => {
   const dispatch = useDispatch();
@@ -17,6 +19,18 @@ const AddToCartButton = ({ product, isHomePage }) => {
 
     await dispatch(addToCart(cartItem));
     await dispatch(fetchAllCartItems());
+
+    toast.success("Added To Cart!", {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
   };
 
   return (

@@ -1,0 +1,38 @@
+.header-wrapper {
+  background-color: #ff6536;
+}
+
+span {
+  cursor: pointer;
+}
+
+.active-header-link {
+  color: #ff6536;
+  background-color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 5px 15px;
+  border-radius: 20px;
+}
+
+.inactive-header-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 5px 15px;
+  border-radius: 20px;
+}
+
+.inactive-header-link:hover {
+  color: #ff6536;
+  background-color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 5px 15px;
+  border-radius: 20px;
+  transition: ease-in-out 0.3s;
+}
+
+.cart-qty-wrapper {
+  cursor: pointer;
+}

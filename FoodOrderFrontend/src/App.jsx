@@ -20,6 +20,8 @@ import AdminOrdersPage from "./Pages/AdminOrdersPage";
 import OrderStatusPage from "./Pages/OrderStatusPage";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // import { PrimeReactProvider, PrimeReactContext } from "primereact/api";
 
@@ -43,6 +45,7 @@ const router = createBrowserRouter(
 function App() {
   return (
     <div className="App">
+      <ToastContainer />
       <RouterProvider router={router} />
     </div>
   );

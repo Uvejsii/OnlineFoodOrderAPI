@@ -1,5 +1,7 @@
 import { useDispatch } from "react-redux";
 import { updateCartItemQuantity } from "../features/orders/ordersSlice";
+import { toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const HandleDecrementButton = ({ product }) => {
   const dispatch = useDispatch();
@@ -14,6 +16,18 @@ const HandleDecrementButton = ({ product }) => {
         productType: product.productType,
       })
     );
+
+    toast.info("Item Quantity Decreased", {
+      position: "top-right",
+      autoClose: 1200,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
   };
 
   return (

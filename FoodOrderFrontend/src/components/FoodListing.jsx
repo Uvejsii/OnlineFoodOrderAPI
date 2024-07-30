@@ -21,8 +21,6 @@ const CardBody = styled.div`
 
 const CardFooter = styled.div`
   padding: 10px;
-  background-color: #ffba39c3;
-  color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -37,7 +35,7 @@ const FoodListing = ({ food, goToFood, isHomePage }) => {
 
   return (
     <motion.div
-      className="col-xl-3 col-lg-3"
+      className="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}

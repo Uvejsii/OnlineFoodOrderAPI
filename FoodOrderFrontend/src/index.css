@@ -16,21 +16,21 @@
 
 /* REGISTER */
 .background-radial-gradient {
-  background-color: hsl(0, 41%, 15%);
+  background-color: #ca370b;
   background-image: radial-gradient(
       650px circle at 0% 0%,
-      hsl(0, 41%, 35%) 15%,
-      hsl(0, 41%, 30%) 35%,
-      hsl(0, 41%, 20%) 75%,
-      hsl(0, 41%, 19%) 80%,
+      hsl(30, 83%, 46%) 15%,
+      hsl(30, 41%, 30%) 35%,
+      hsl(30, 41%, 20%) 75%,
+      hsl(30, 41%, 19%) 80%,
       transparent 100%
     ),
     radial-gradient(
       1250px circle at 100% 100%,
-      hsl(0, 41%, 45%) 15%,
-      hsl(0, 41%, 30%) 35%,
-      hsl(0, 41%, 20%) 75%,
-      hsl(0, 41%, 19%) 80%,
+      hsl(30, 83%, 46%) 15%,
+      hsl(30, 41%, 30%) 35%,
+      hsl(30, 41%, 20%) 75%,
+      hsl(30, 41%, 19%) 80%,
       transparent 100%
     );
 }
@@ -40,7 +40,7 @@
   width: 220px;
   top: -60px;
   left: -130px;
-  background: radial-gradient(#ff0000, #ff4d4d);
+  background: radial-gradient(#ff6536, #ff6536);
   overflow: hidden;
 }
 
@@ -50,12 +50,12 @@
   right: -110px;
   width: 300px;
   height: 300px;
-  background: radial-gradient(#ff0000, #ff4d4d);
+  background: radial-gradient(#ff6536, #ff6536);
   overflow: hidden;
 }
 
 .bg-glass {
-  background-color: hsla(360, 94%, 45%, 0.3) !important;
+  background-color: hsla(28, 94%, 45%, 0.3) !important;
   backdrop-filter: saturate(100%) blur(10px);
 }
 
@@ -133,38 +133,12 @@
 }
 
 /* Button styles */
-.btn {
-  border-radius: 25px;
-  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
-}
 
-.btn:hover {
-  transform: translateY(-3px);
-}
-
-.btn-danger {
-  background-color: #ff4c4c; /* More vibrant red */
-  border: 1px solid #e04343;
-}
-
-.btn-danger:hover {
-  background-color: #e04343;
-}
-
-.btn-warning {
-  background-color: #ffa500; /* Orange */
-  border: 1px solid #e04343;
-}
-
-.btn-warning:hover {
-  background-color: #e59400;
-}
-
-.btn-info {
-  background-color: #00c4cc; /* More vibrant blue */
+/* .btn-info {
+  background-color: #00c4cc; More vibrant blue 
   border: none;
 }
 
 .btn-info:hover {
   background-color: #00a5a8;
-}
+} */

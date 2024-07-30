@@ -1,5 +1,7 @@
 import { useDispatch } from "react-redux";
 import { updateCartItemQuantity } from "../features/orders/ordersSlice";
+import { toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const HandleIncrementButton = ({ product }) => {
   const dispatch = useDispatch();
@@ -12,6 +14,18 @@ const HandleIncrementButton = ({ product }) => {
         productType: product.productType,
       })
     );
+
+    toast.info("Item Quantity Increased", {
+      position: "top-right",
+      autoClose: 1200,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
   };
 
   return (

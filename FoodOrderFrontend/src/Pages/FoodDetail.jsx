@@ -31,40 +31,42 @@ const FoodDetail = () => {
   }
 
   return (
-    <div className="product-detail-container vh-100 d-flex">
-      <section className="product container col-xl-8 col-lg-9 shadow-lg my-5">
-        <div className="product__photo">
-          <div className="photo-container">
-            <div className="photo-main d-flex justify-content-center align-items-center rounded">
-              <img
-                src={food.imageUrl}
-                alt={`${food.name} image`}
-                className="rounded-circle h-75"
-              />
+    <>
+      <div className="product-detail-container vh-100 d-flex">
+        <section className="product container col-xl-8 col-lg-9 col-md-10 shadow-lg my-5">
+          <div className="product__photo">
+            <div className="photo-container">
+              <div className="photo-main d-flex justify-content-center align-items-center rounded">
+                <img
+                  src={food.imageUrl}
+                  alt={`${food.name} image`}
+                  className="rounded-circle h-75"
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <div className="product__info">
-          <div className="title">
-            <h1>{food.name}</h1>
-            <span>COD: {food.id}</span>
+          <div className="product__info">
+            <div className="title">
+              <h1>{food.name}</h1>
+              <span>COD: {food.id}</span>
+            </div>
+            <div className="price">
+              € <span>{food.price.toFixed(2)}</span>
+            </div>
+            <div className="rating">Stars: {food.rating}</div>
+            <div className="description pe-3">
+              <h3>Description</h3>
+              <p>{food.description}</p>
+            </div>
+            <AddToCartButton product={food} />
           </div>
-          <div className="price">
-            € <span>{food.price.toFixed(2)}</span>
+          <div className="navigate-btns d-flex gap-5 mt-4">
+            <GoToAdminPageButton />
+            <GoToHomePageButton />
           </div>
-          <div className="rating">Stars: {food.rating}</div>
-          <div className="description pe-3">
-            <h3>Description</h3>
-            <p>{food.description}</p>
-          </div>
-          <AddToCartButton product={food} />
-        </div>
-        <div className="navigate-btns d-flex gap-5 mt-4">
-          <GoToAdminPageButton />
-          <GoToHomePageButton />
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
+    </>
   );
 };
 

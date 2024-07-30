@@ -1,0 +1,26 @@
+.btn {
+  border-radius: 25px;
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+}
+
+.btn-danger {
+  background-color: #ff4c4c; /* More vibrant red */
+  border: 1px solid #e04343;
+}
+
+.btn-danger:hover {
+  background-color: #e04343;
+}
+
+.btn-warning {
+  background-color: #ffa500; /* Orange */
+  border: 1px solid #e04343;
+}
+
+.btn-warning:hover {
+  background-color: #e59400;
+}
