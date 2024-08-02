@@ -5,10 +5,16 @@ import HandleRemoveCartItemButton from "./handleRemoveCartItemButton";
 const ProductsAddedToCart = ({ item }) => {
   return (
     <>
-      <div className="border p-2">
-        <img src={item.imageUrl} alt={`${item.name} image`} />
-        <h5>{item.name}</h5>
-        <p>€ {item.price.toFixed(2)}</p>
+      <div className="border rounded shadow-sm p-3">
+        <div className="d-flex">
+          <img
+            src={item.imageUrl}
+            alt={`${item.name} image`}
+            className="w-50 mx-auto"
+          />
+        </div>
+        <h6>{item.name}</h6>
+        <p className="m-0">€ {item.price.toFixed(2)}</p>
         <div className="d-flex align-items-center">
           <span className="me-2">QTY:</span>
           <HandleDecrementButton product={item} />

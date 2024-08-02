@@ -36,3 +36,7 @@ span {
 .cart-qty-wrapper {
   cursor: pointer;
 }
+
+.cart-qty {
+  color: #ff6536 !important;
+}

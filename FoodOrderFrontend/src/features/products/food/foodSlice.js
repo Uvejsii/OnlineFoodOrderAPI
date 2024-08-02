@@ -66,6 +66,7 @@ const initialState = {
     category: "",
     quantity: "",
   },
+  foodToDelete: {},
 };
 
 export const foodSlice = createSlice({
@@ -75,6 +76,9 @@ export const foodSlice = createSlice({
     setEditFoodData: (state, action) => {
       state.editFoodData = action.payload;
       state.selectedFoodId = action.payload.id;
+    },
+    setFoodToDelete: (state, action) => {
+      state.foodToDelete = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -143,5 +147,5 @@ export const foodSlice = createSlice({
   },
 });
 
-export const { setEditFoodData } = foodSlice.actions;
+export const { setEditFoodData, setFoodToDelete } = foodSlice.actions;
 export default foodSlice.reducer;

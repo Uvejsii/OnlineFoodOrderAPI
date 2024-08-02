@@ -5,16 +5,15 @@ import EditDrinkForm from "../components/EditDrinkForm";
 import EditFoodForm from "../components/EditFoodForm";
 import FilterProducts from "../components/FilterProducts";
 import FoodListings from "../components/FoodListings";
-import { Cart2, PlusCircleFill } from "react-bootstrap-icons";
+import { PlusCircleFill } from "react-bootstrap-icons";
 import SearchProducts from "../components/SearchProducts";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import AuthorizeView, { AuthorizedUser } from "../components/AuthorizeView";
 import LogOutButton from "../components/LogOutButton";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchAllCartItems } from "../features/orders/ordersSlice";
 import styled from "styled-components";
 import "/src/admin.css";
+import ConfirmDeleteProduct from "../components/StartDeleteProduct";
+import ConfirmDeleteProductModal from "../components/ConfirmDeleteProductModal";
 
 const Container = styled.div`
   background-color: #f5f5f5;
@@ -50,24 +49,6 @@ const AdminPage = () => {
     drinks: [],
   });
 
-  const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.orders.cartItems) || [];
-  const [cartQuantity, setCartQuantity] = useState(0);
-
-  useEffect(() => {
-    dispatch(fetchAllCartItems());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (Array.isArray(cartItems)) {
-      const totalCartQty = cartItems.reduce(
-        (acc, item) => acc + item.quantity,
-        0
-      );
-      setCartQuantity(totalCartQty);
-    }
-  }, [cartItems]);
-
   return (
     <AuthorizeView>
       <Container>
@@ -100,6 +81,7 @@ const AdminPage = () => {
         <EditFoodForm />
         <AddDrinkForm />
         <EditDrinkForm />
+        <ConfirmDeleteProductModal />
         <div className="products-wrapper row row-cols-1 row-cols-xl-3 row-cols-lg-3 row-cols-md-2 g-4">
           <FoodListings foods={filteredProducts.foods} />
           <DrinkListings drinks={filteredProducts.drinks} />

@@ -1,14 +1,14 @@
-.btn {
+/* .btn {
   border-radius: 25px;
   transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
-}
+} */
 
-.btn:hover {
+/* .btn:hover {
   transform: translateY(-3px);
-}
+}  */
 
-.btn-danger {
-  background-color: #ff4c4c; /* More vibrant red */
+/* .btn-danger {
+  background-color: #ff4c4c;
   border: 1px solid #e04343;
 }
 
@@ -17,10 +17,10 @@
 }
 
 .btn-warning {
-  background-color: #ffa500; /* Orange */
+  background-color: #ffa500;
   border: 1px solid #e04343;
 }
 
 .btn-warning:hover {
   background-color: #e59400;
-}
+} */

@@ -1,4 +1,4 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "../header.css";
 import { AuthorizedUser } from "./AuthorizeView";
 import CartQuantity from "./CartQuantity";
