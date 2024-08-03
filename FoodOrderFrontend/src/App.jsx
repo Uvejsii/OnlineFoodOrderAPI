@@ -14,7 +14,6 @@ import DrinkDetail from "./Pages/DrinkDetail";
 import NotFound from "./Pages/NotFound";
 import HomePage from "./Pages/HomePage";
 import Login from "./Pages/Login";
-import Register from "./Pages/Register";
 import Cart from "./Pages/Cart";
 import AdminOrdersPage from "./Pages/AdminOrdersPage";
 import OrderStatusPage from "./Pages/OrderStatusPage";
@@ -22,6 +21,8 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import UserRegister from "./Pages/UserRegister";
+import AdminRegister from "./Pages/AdminRegister";
 
 // import { PrimeReactProvider, PrimeReactContext } from "primereact/api";
 
@@ -29,7 +30,8 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />}>
       <Route index element={<HomePage />}></Route>
-      <Route path="/register" element={<Register />}></Route>
+      <Route path="/userRegister" element={<UserRegister />}></Route>
+      <Route path="/adminRegister" element={<AdminRegister />}></Route>
       <Route path="/login" element={<Login />}></Route>
       <Route path="/admin" element={<AdminPage />}></Route>
       <Route path="/food/:foodId" element={<FoodDetail />}></Route>

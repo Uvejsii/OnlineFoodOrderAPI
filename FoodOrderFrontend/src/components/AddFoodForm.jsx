@@ -1,6 +1,8 @@
 import { useDispatch } from "react-redux";
 import { addFood } from "../features/products/food/foodSlice";
 import { useState } from "react";
+import { toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddFoodForm = () => {
   const dispatch = useDispatch();
@@ -25,6 +27,18 @@ const AddFoodForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(addFood(newFood));
+
+    toast.success("Food Added!", {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
   };
 
   return (

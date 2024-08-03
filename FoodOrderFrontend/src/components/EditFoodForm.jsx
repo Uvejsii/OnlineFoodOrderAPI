@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { editFood, fetchFoods } from "../features/products/food/foodSlice";
 import { useState, useEffect } from "react";
+import { toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EditFoodForm = () => {
   const dispatch = useDispatch();
@@ -20,6 +22,18 @@ const EditFoodForm = () => {
     e.preventDefault();
     dispatch(editFood(formData));
     dispatch(fetchFoods());
+
+    toast.success("Food Edited!", {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
   };
 
   return (

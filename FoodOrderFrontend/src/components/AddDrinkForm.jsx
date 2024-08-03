@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addDrink } from "../features/products/drink/drinkSlice";
+import { toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddDrinkForm = () => {
   const dispatch = useDispatch();
@@ -25,6 +27,18 @@ const AddDrinkForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(addDrink(newDrink));
+
+    toast.success("Drink Added!", {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
   };
   return (
     <form onSubmit={handleSubmit}>

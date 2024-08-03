@@ -1,15 +1,8 @@
-import { useDispatch, useSelector } from "react-redux";
-import { deleteFood } from "../features/products/food/foodSlice";
+import { useSelector } from "react-redux";
 import DeleteFoodButton from "./DeleteFoodButton";
 
-const ConfirmDeleteProductModal = () => {
-  const dispatch = useDispatch();
+const ConfirmDeleteFoodModal = () => {
   const foodToDelete = useSelector((state) => state.foods.foodToDelete);
-
-  const handleDeleteProduct = (clickedFood) => {
-    dispatch(deleteFood(clickedFood));
-  };
-
   return (
     <div
       className="modal fade"
@@ -47,4 +40,4 @@ const ConfirmDeleteProductModal = () => {
   );
 };
 
-export default ConfirmDeleteProductModal;
+export default ConfirmDeleteFoodModal;

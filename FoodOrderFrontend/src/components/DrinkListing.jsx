@@ -3,6 +3,7 @@ import DeleteDrinkButton from "./DeleteDrinkButton";
 import EditDrinkButton from "./EditDrinkButton";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import StartDeleteDrink from "./StartDeleteDrink";
 
 const Card = styled(motion.div)`
   background-color: white;
@@ -74,7 +75,7 @@ const DrinkListing = ({ drink, goToDrink, isHomePage }) => {
           ) : (
             <div className="d-flex flex-column gap-2 w-100">
               <div className="d-flex gap-3 w-100">
-                <DeleteDrinkButton drink={drink} />
+                <StartDeleteDrink drink={drink} />
                 <EditDrinkButton drink={drink} />
               </div>
               <div className="d-flex">

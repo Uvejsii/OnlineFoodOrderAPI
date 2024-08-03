@@ -2,21 +2,17 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { EnvelopeAtFill, LockFill } from "react-bootstrap-icons";
 
-const Register = () => {
-  // state variables for email and passwords
+const UserRegister = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
-
-  // state variable for error messages
   const [error, setError] = useState("");
 
   const handleLoginClick = () => {
     navigate("/login");
   };
 
-  // handle change events for input fields
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "email") setEmail(value);
@@ -24,10 +20,8 @@ const Register = () => {
     if (name === "confirmPassword") setConfirmPassword(value);
   };
 
-  // handle submit event for the form
   const handleSubmit = (e) => {
     e.preventDefault();
-    // validate email and passwords
     if (!email || !password || !confirmPassword) {
       setError("Please fill in all fields.");
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -35,10 +29,8 @@ const Register = () => {
     } else if (password !== confirmPassword) {
       setError("Passwords do not match.");
     } else {
-      // clear error message
       setError("");
-      // post data to the /register api
-      fetch("http://localhost:5071/register", {
+      fetch("http://localhost:5071/customRegister", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -46,21 +38,24 @@ const Register = () => {
         body: JSON.stringify({
           email: email,
           password: password,
+          confirmPassword: confirmPassword,
+          role: "User",
         }),
       })
-        //.then((response) => response.json())
+        .then((response) => response.json())
         .then((data) => {
-          // handle success or error from the server
           console.log(data);
-          if (data.ok) setError("Successful register.");
-          else setError("Error registering.");
+          if (data.ok) {
+            setError("Successful register.");
+            navigate("/login");
+          } else {
+            setError("Error registering.");
+          }
         })
         .catch((error) => {
-          // handle network error
           console.error(error);
           setError("Error registering.");
         });
-      navigate("/login");
     }
   };
 
@@ -78,7 +73,7 @@ const Register = () => {
               className="position-absolute shadow-5-strong"
             ></div>
             <div className="card bg-glass col-12">
-              <h3 className="text-center text-light mt-4">Register</h3>
+              <h3 className="text-center text-light mt-4">Register as User</h3>
               <div className="card-body px-4 pb-5 px-md-5">
                 <form onSubmit={handleSubmit}>
                   <div className="form-outline text-light mb-4 fw-semibold">
@@ -151,4 +146,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default UserRegister;

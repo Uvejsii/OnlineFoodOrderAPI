@@ -1,10 +1,9 @@
 import AddToCartButton from "./AddToCartButton";
-import DeleteFoodButton from "./DeleteFoodButton";
 import EditFoodButton from "./EditFoodButton";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import "/src/productDetail.css";
-import StartDeleteProduct from "./StartDeleteProduct";
+import StartDeleteFood from "./StartDeleteFood";
 
 const Card = styled(motion.div)`
   background-color: white;
@@ -76,7 +75,7 @@ const FoodListing = ({ food, goToFood, isHomePage }) => {
           ) : (
             <div className="d-flex flex-column gap-2 w-100">
               <div className="d-flex gap-3 w-100">
-                <StartDeleteProduct product={food} />
+                <StartDeleteFood food={food} />
                 <EditFoodButton food={food} />
               </div>
               <div className="d-flex">

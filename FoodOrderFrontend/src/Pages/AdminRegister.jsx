@@ -2,40 +2,35 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { EnvelopeAtFill, LockFill } from "react-bootstrap-icons";
 
-const Login = () => {
+const AdminRegister = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberme, setRememberme] = useState(false);
-  const [error, setError] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
+  const [error, setError] = useState("");
+
+  const handleLoginClick = () => {
+    navigate("/login");
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "email") setEmail(value);
     if (name === "password") setPassword(value);
-    if (name === "rememberme") setRememberme(e.target.checked);
+    if (name === "confirmPassword") setConfirmPassword(value);
   };
 
-  const handleRegisterClick = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    navigate("/register");
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!email || !password) {
+    if (!email || !password || !confirmPassword) {
       setError("Please fill in all fields.");
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Please enter a valid email address.");
+    } else if (password !== confirmPassword) {
+      setError("Passwords do not match.");
     } else {
-      // @Admin00
       setError("");
-      var loginurl = "";
-      if (rememberme == true) {
-        loginurl = "http://localhost:5071/login?useCookies=true";
-      } else {
-        loginurl = "http://localhost:5071/login?useSessionCookies=true";
-      }
-
-      await fetch(loginurl, {
+      fetch("http://localhost:5071/admin-register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,18 +38,22 @@ const Login = () => {
         body: JSON.stringify({
           email: email,
           password: password,
+          role: "Admin",
         }),
-        credentials: "include",
       })
+        .then((response) => response.json())
         .then((data) => {
+          console.log(data);
           if (data.ok) {
-            setError("Successful Login.");
-            navigate("/admin");
-          } else setError("Error Logging In.");
+            setError("Successful register.");
+            navigate("/login");
+          } else {
+            setError("Error registering.");
+          }
         })
         .catch((error) => {
           console.error(error);
-          setError("Error Logging in.");
+          setError("Error registering.");
         });
     }
   };
@@ -73,7 +72,7 @@ const Login = () => {
               className="position-absolute shadow-5-strong"
             ></div>
             <div className="card bg-glass col-12">
-              <h3 className="text-center text-light mt-4">Login</h3>
+              <h3 className="text-center text-light mt-4">Register as Admin</h3>
               <div className="card-body px-4 pb-5 px-md-5">
                 <form onSubmit={handleSubmit}>
                   <div className="form-outline text-light mb-4 fw-semibold">
@@ -106,32 +105,33 @@ const Login = () => {
                       onChange={handleChange}
                     />
                   </div>
-                  {error && (
-                    <p className="error text-light fw-semibold">{error}</p>
-                  )}
-                  <div className="d-flex align-items-center gap-1 fw-semibold mb-3">
+                  <div className="form-outline text-light mb-4 fw-semibold">
+                    <div className="d-flex align-items-center gap-1 mb-1">
+                      <LockFill />
+                      <label htmlFor="confirmPassword">Confirm Password:</label>
+                    </div>
                     <input
-                      type="checkbox"
-                      id="rememberme"
-                      name="rememberme"
-                      className="mt-1"
-                      checked={rememberme}
+                      type="password"
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      className="form-control"
+                      placeholder="Confirm password"
+                      value={confirmPassword}
                       onChange={handleChange}
                     />
-                    <span className="text-light m-0">Remember Me</span>
                   </div>
                   <div className="d-flex gap-5">
                     <button
                       type="submit"
-                      className="btn btn-danger fw-semibold w-50"
-                    >
-                      Login
-                    </button>
-                    <button
-                      onClick={handleRegisterClick}
-                      className="btn btn-primary fw-semibold w-50"
+                      className="btn btn-success fw-semibold w-50"
                     >
                       Register
+                    </button>
+                    <button
+                      onClick={handleLoginClick}
+                      className="btn btn-primary fw-semibold w-50"
+                    >
+                      Go to Login
                     </button>
                   </div>
                 </form>
@@ -139,9 +139,10 @@ const Login = () => {
             </div>
           </div>
         </div>
+        {error && <p className="error">{error}</p>}
       </div>
     </section>
   );
 };
 
-export default Login;
+export default AdminRegister;

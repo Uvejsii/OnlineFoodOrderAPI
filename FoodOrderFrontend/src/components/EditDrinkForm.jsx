@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { editDrink, fetchDrinks } from "../features/products/drink/drinkSlice";
+import { toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EditDrinkForm = () => {
   const dispatch = useDispatch();
@@ -20,6 +22,18 @@ const EditDrinkForm = () => {
     e.preventDefault();
     dispatch(editDrink(formData));
     dispatch(fetchDrinks());
+
+    toast.success("Drink Edited!", {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
   };
 
   return (

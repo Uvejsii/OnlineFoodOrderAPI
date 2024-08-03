@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using FoodOrderAPI.DatabaseContext.Models.Orders;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Serilog;
-using System.Collections.Immutable;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,8 +20,14 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<ModelsContext>();
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdministratorRole",
+        policy => policy.RequireRole("Admin"));
+});
+
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ModelsContext>();
 
 builder.Services.AddCors(options =>
@@ -34,7 +40,12 @@ builder.Services.AddCors(options =>
             .AllowCredentials());
 });
 
+builder.Services.AddSingleton<IEmailSender, NoOpEmailSender>();
+
 var app = builder.Build();
+
+app.UseCors("AllowFrontend");
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -45,11 +56,91 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MapIdentityApi<ApplicationUser>();
-app.UseCors("AllowFrontend");
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    await SeedData.Initialize(services, userManager, roleManager);
+}
 
 app.MapGet("/", () => "Hello World!");
 
 // ACCOUNT ENDPOINTS
+// app.MapPost("/register", async (UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, RegisterDto registerDto) =>
+// {
+//     if (string.IsNullOrEmpty(registerDto.Email) || string.IsNullOrEmpty(registerDto.Password) || string.IsNullOrEmpty(registerDto.ConfirmPassword))
+//     {
+//         return Results.BadRequest("Email, Password, and ConfirmPassword are required.");
+//     }
+
+//     if (registerDto.Password != registerDto.ConfirmPassword)
+//     {
+//         return Results.BadRequest("Password and ConfirmPassword do not match.");
+//     }
+
+//     var user = new ApplicationUser
+//     {
+//         UserName = registerDto.Email,
+//         Email = registerDto.Email
+//     };
+
+//     var result = await userManager.CreateAsync(user, registerDto.Password);
+//     if (!result.Succeeded)
+//     {
+//         return Results.BadRequest(result.Errors);
+//     }
+
+//     // Add the role assignment logic here
+//     if (!string.IsNullOrEmpty(registerDto.Role) && await roleManager.RoleExistsAsync(registerDto.Role))
+//     {
+//         await userManager.AddToRoleAsync(user, registerDto.Role);
+//     }
+//     else
+//     {
+//         await userManager.AddToRoleAsync(user, "User");
+//     }
+
+//     return Results.Ok("User registered successfully.");
+// });
+
+app.MapPost("/customRegister", async (UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, RegisterDto registerDto) =>
+{
+    if (string.IsNullOrEmpty(registerDto.Email) || string.IsNullOrEmpty(registerDto.Password) || string.IsNullOrEmpty(registerDto.ConfirmPassword))
+    {
+        return Results.BadRequest("Email, Password, and ConfirmPassword are required.");
+    }
+
+    if (registerDto.Password != registerDto.ConfirmPassword)
+    {
+        return Results.BadRequest("Password and ConfirmPassword do not match.");
+    }
+
+    var user = new ApplicationUser
+    {
+        UserName = registerDto.Email,
+        Email = registerDto.Email
+    };
+
+    var result = await userManager.CreateAsync(user, registerDto.Password);
+    if (!result.Succeeded)
+    {
+        return Results.BadRequest(result.Errors);
+    }
+
+    if (!string.IsNullOrEmpty(registerDto.Role) && await roleManager.RoleExistsAsync(registerDto.Role))
+    {
+        await userManager.AddToRoleAsync(user, registerDto.Role);
+    }
+    else
+    {
+        await userManager.AddToRoleAsync(user, "User");
+    }
+
+    return Results.Ok("User registered successfully.");
+});
+
 app.MapPost("/logout", async (SignInManager<ApplicationUser> signInManager) => {
     await signInManager.SignOutAsync();
     return Results.Ok();
@@ -75,7 +166,7 @@ app.MapPost("/postFood", async (ModelsContext context, Food food) => {
     context.Foods.Add(food);
     await context.SaveChangesAsync();
     return Results.Ok(await context.Foods.ToListAsync());
-});
+}).RequireAuthorization("AdminPolicy");
 
 app.MapPut("/editFood/{id}", async (ModelsContext context, Food food, int id) => {
     var foundFood = await context.Foods.FindAsync(id);
@@ -498,7 +589,7 @@ app.MapGet("/getOrdersForAdmin", async (ModelsContext context, ILogger<Program> 
         logger.LogError(ex, "An error occurred while fetching orders.");
         return Results.Problem("An internal server error occurred.", statusCode: 500);
     }
-});
+}).RequireAuthorization();
 
 app.MapGet("/getLastOrder", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext context) => 
 {

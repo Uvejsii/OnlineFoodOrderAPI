@@ -65,6 +65,7 @@ const initialState = {
     category: "",
     quantity: "",
   },
+  drinkToDelete: {},
 };
 
 export const drinkSlice = createSlice({
@@ -73,6 +74,9 @@ export const drinkSlice = createSlice({
   reducers: {
     setEditDrinkData: (state, action) => {
       state.editDrinkData = action.payload;
+    },
+    setDrinkToDelete: (state, action) => {
+      state.drinkToDelete = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -137,5 +141,5 @@ export const drinkSlice = createSlice({
   },
 });
 
-export const { setEditDrinkData } = drinkSlice.actions;
+export const { setEditDrinkData, setDrinkToDelete } = drinkSlice.actions;
 export default drinkSlice.reducer;

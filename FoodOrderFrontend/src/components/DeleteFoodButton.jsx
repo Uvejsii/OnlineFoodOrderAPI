@@ -1,11 +1,25 @@
 import { useDispatch } from "react-redux";
 import { deleteFood } from "../features/products/food/foodSlice";
+import { toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const DeleteFoodButton = ({ food }) => {
   const dispatch = useDispatch();
 
   const handleDelete = () => {
     dispatch(deleteFood(food));
+
+    toast.success("Food Deleted!", {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
   };
 
   return (
