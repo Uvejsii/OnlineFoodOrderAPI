@@ -50,7 +50,7 @@ const AdminPage = () => {
   });
 
   return (
-    <AuthorizeView>
+    <AuthorizeView requiredRole="Admin">
       <Container>
         <SubHeader>
           Welcome:{" "}

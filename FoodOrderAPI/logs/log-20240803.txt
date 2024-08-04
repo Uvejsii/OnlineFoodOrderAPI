@@ -6737,3 +6737,136 @@ DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
 2024-08-03 23:47:42.726 +02:00 [INF] AuthenticationScheme: Identity.Bearer was challenged.
 2024-08-03 23:47:42.732 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5071/getAllAddedItems - 401 0 null 28.0841ms
 2024-08-03 23:47:54.220 +02:00 [INF] Application is shutting down...
+2024-08-03 23:49:52.611 +02:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2024-08-03 23:49:52.803 +02:00 [INF] User profile is available. Using 'C:\Users\Admin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-08-03 23:49:54.343 +02:00 [WRN] No store type was specified for the decimal property 'Price' on entity type 'CartItem'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2024-08-03 23:49:54.349 +02:00 [WRN] No store type was specified for the decimal property 'TotalAmount' on entity type 'Order'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2024-08-03 23:49:54.358 +02:00 [WRN] No store type was specified for the decimal property 'Price' on entity type 'OrderItem'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2024-08-03 23:49:54.378 +02:00 [WRN] No store type was specified for the decimal property 'Price' on entity type 'Drink'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2024-08-03 23:49:54.388 +02:00 [WRN] No store type was specified for the decimal property 'Price' on entity type 'Food'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2024-08-03 23:49:55.620 +02:00 [INF] Executed DbCommand (71ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedName_0
+2024-08-03 23:49:55.784 +02:00 [INF] Executed DbCommand (3ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedName_0
+2024-08-03 23:49:55.853 +02:00 [INF] Executed DbCommand (14ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+2024-08-03 23:49:56.286 +02:00 [INF] Now listening on: http://localhost:5071
+2024-08-03 23:49:56.310 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-03 23:49:56.316 +02:00 [INF] Hosting environment: Development
+2024-08-03 23:49:56.319 +02:00 [INF] Content root path: C:\Users\Admin\Desktop\FoodOrder\FoodOrderAPI
+2024-08-03 23:50:14.652 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5071/getAllFoodProducts - null null
+2024-08-03 23:50:14.652 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5071/getAllAddedItems - null null
+2024-08-03 23:50:14.652 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5071/getAllDrinkProducts - null null
+2024-08-03 23:50:14.810 +02:00 [INF] CORS policy execution successful.
+2024-08-03 23:50:14.810 +02:00 [INF] CORS policy execution successful.
+2024-08-03 23:50:14.810 +02:00 [INF] CORS policy execution successful.
+2024-08-03 23:50:14.851 +02:00 [INF] Executing endpoint 'HTTP: GET /getAllFoodProducts'
+2024-08-03 23:50:14.856 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-03 23:50:14.856 +02:00 [INF] Executing endpoint 'HTTP: GET /getAllDrinkProducts'
+2024-08-03 23:50:14.868 +02:00 [INF] AuthenticationScheme: Identity.Bearer was challenged.
+2024-08-03 23:50:14.889 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5071/getAllAddedItems - 401 0 null 240.2087ms
+2024-08-03 23:50:14.909 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5071/getAllAddedItems - null null
+2024-08-03 23:50:14.935 +02:00 [INF] CORS policy execution successful.
+2024-08-03 23:50:14.944 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-03 23:50:14.950 +02:00 [INF] AuthenticationScheme: Identity.Bearer was challenged.
+2024-08-03 23:50:14.958 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5071/getAllAddedItems - 401 0 null 48.3492ms
+2024-08-03 23:50:15.032 +02:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [d].[Id], [d].[Category], [d].[Description], [d].[ImageUrl], [d].[Name], [d].[Price], [d].[Quantity], [d].[Rating]
+FROM [Drinks] AS [d]
+2024-08-03 23:50:15.045 +02:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [f].[Id], [f].[Category], [f].[Description], [f].[ImageUrl], [f].[Name], [f].[Price], [f].[Quantity], [f].[Rating]
+FROM [Foods] AS [f]
+2024-08-03 23:50:15.100 +02:00 [INF] Setting HTTP status code 200.
+2024-08-03 23:50:15.100 +02:00 [INF] Setting HTTP status code 200.
+2024-08-03 23:50:15.118 +02:00 [INF] Writing value of type 'List`1' as Json.
+2024-08-03 23:50:15.121 +02:00 [INF] Writing value of type 'List`1' as Json.
+2024-08-03 23:50:15.160 +02:00 [INF] Executed endpoint 'HTTP: GET /getAllFoodProducts'
+2024-08-03 23:50:15.160 +02:00 [INF] Executed endpoint 'HTTP: GET /getAllDrinkProducts'
+2024-08-03 23:50:15.171 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5071/getAllFoodProducts - 200 null application/json; charset=utf-8 523.3006ms
+2024-08-03 23:50:15.171 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5071/getAllDrinkProducts - 200 null application/json; charset=utf-8 523.3513ms
+2024-08-03 23:50:15.171 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5071/getAllDrinkProducts - null null
+2024-08-03 23:50:15.182 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5071/getAllFoodProducts - null null
+2024-08-03 23:50:15.198 +02:00 [INF] CORS policy execution successful.
+2024-08-03 23:50:15.206 +02:00 [INF] CORS policy execution successful.
+2024-08-03 23:50:15.209 +02:00 [INF] Executing endpoint 'HTTP: GET /getAllDrinkProducts'
+2024-08-03 23:50:15.211 +02:00 [INF] Executing endpoint 'HTTP: GET /getAllFoodProducts'
+2024-08-03 23:50:15.250 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [d].[Id], [d].[Category], [d].[Description], [d].[ImageUrl], [d].[Name], [d].[Price], [d].[Quantity], [d].[Rating]
+FROM [Drinks] AS [d]
+2024-08-03 23:50:15.251 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [f].[Id], [f].[Category], [f].[Description], [f].[ImageUrl], [f].[Name], [f].[Price], [f].[Quantity], [f].[Rating]
+FROM [Foods] AS [f]
+2024-08-03 23:50:15.266 +02:00 [INF] Setting HTTP status code 200.
+2024-08-03 23:50:15.272 +02:00 [INF] Setting HTTP status code 200.
+2024-08-03 23:50:15.275 +02:00 [INF] Writing value of type 'List`1' as Json.
+2024-08-03 23:50:15.280 +02:00 [INF] Writing value of type 'List`1' as Json.
+2024-08-03 23:50:15.284 +02:00 [INF] Executed endpoint 'HTTP: GET /getAllDrinkProducts'
+2024-08-03 23:50:15.290 +02:00 [INF] Executed endpoint 'HTTP: GET /getAllFoodProducts'
+2024-08-03 23:50:15.295 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5071/getAllDrinkProducts - 200 null application/json; charset=utf-8 123.274ms
+2024-08-03 23:50:15.299 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5071/getAllFoodProducts - 200 null application/json; charset=utf-8 117.0095ms
+2024-08-03 23:52:56.813 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5071/getAllAddedItems - null null
+2024-08-03 23:52:56.830 +02:00 [INF] CORS policy execution successful.
+2024-08-03 23:52:56.844 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-03 23:52:56.851 +02:00 [INF] AuthenticationScheme: Identity.Bearer was challenged.
+2024-08-03 23:52:56.856 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5071/getAllAddedItems - 401 0 null 42.236ms
+2024-08-03 23:52:56.869 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5071/getAllAddedItems - null null
+2024-08-03 23:52:56.878 +02:00 [INF] CORS policy execution successful.
+2024-08-03 23:52:56.882 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-03 23:52:56.886 +02:00 [INF] AuthenticationScheme: Identity.Bearer was challenged.
+2024-08-03 23:52:56.891 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5071/getAllAddedItems - 401 0 null 22.248ms
+2024-08-03 23:53:50.044 +02:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5071/customRegister - null null
+2024-08-03 23:53:50.068 +02:00 [INF] CORS policy execution successful.
+2024-08-03 23:53:50.083 +02:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5071/customRegister - 204 null null 38.8885ms
+2024-08-03 23:53:50.099 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5071/customRegister - application/json 89
+2024-08-03 23:53:50.111 +02:00 [INF] CORS policy execution successful.
+2024-08-03 23:53:50.126 +02:00 [INF] Executing endpoint 'HTTP: POST /customRegister'
+2024-08-03 23:53:50.516 +02:00 [INF] Executed DbCommand (11ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2024-08-03 23:53:50.864 +02:00 [INF] Executed DbCommand (15ms) [Parameters=[@p0='?' (Size = 450), @p1='?' (DbType = Int32), @p2='?' (Size = 4000), @p3='?' (Size = 256), @p4='?' (DbType = Boolean), @p5='?' (DbType = Boolean), @p6='?' (DbType = DateTimeOffset), @p7='?' (Size = 256), @p8='?' (Size = 256), @p9='?' (Size = 4000), @p10='?' (Size = 4000), @p11='?' (DbType = Boolean), @p12='?' (Size = 4000), @p13='?' (DbType = Boolean), @p14='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [AspNetUsers] ([Id], [AccessFailedCount], [ConcurrencyStamp], [Email], [EmailConfirmed], [LockoutEnabled], [LockoutEnd], [NormalizedEmail], [NormalizedUserName], [PasswordHash], [PhoneNumber], [PhoneNumberConfirmed], [SecurityStamp], [TwoFactorEnabled], [UserName])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14);
+2024-08-03 23:53:50.909 +02:00 [INF] Executed DbCommand (6ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedName_0
+2024-08-03 23:53:50.939 +02:00 [INF] Executed DbCommand (6ms) [Parameters=[@__normalizedRoleName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedRoleName_0
+2024-08-03 23:53:51.016 +02:00 [INF] Executed DbCommand (5ms) [Parameters=[@__p_0='?' (Size = 450), @__p_1='?' (Size = 450)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[UserId], [a].[RoleId]
+FROM [AspNetUserRoles] AS [a]
+WHERE [a].[UserId] = @__p_0 AND [a].[RoleId] = @__p_1
+2024-08-03 23:53:51.038 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@__normalizedRoleName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+FROM [AspNetRoles] AS [a]
+WHERE [a].[NormalizedName] = @__normalizedRoleName_0
+2024-08-03 23:53:51.099 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2024-08-03 23:53:51.189 +02:00 [INF] Executed DbCommand (16ms) [Parameters=[@p0='?' (Size = 450), @p1='?' (Size = 450), @p16='?' (Size = 450), @p2='?' (DbType = Int32), @p3='?' (Size = 4000), @p17='?' (Size = 4000), @p4='?' (Size = 256), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (DbType = DateTimeOffset), @p8='?' (Size = 256), @p9='?' (Size = 256), @p10='?' (Size = 4000), @p11='?' (Size = 4000), @p12='?' (DbType = Boolean), @p13='?' (Size = 4000), @p14='?' (DbType = Boolean), @p15='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AspNetUserRoles] ([RoleId], [UserId])
+VALUES (@p0, @p1);
+UPDATE [AspNetUsers] SET [AccessFailedCount] = @p2, [ConcurrencyStamp] = @p3, [Email] = @p4, [EmailConfirmed] = @p5, [LockoutEnabled] = @p6, [LockoutEnd] = @p7, [NormalizedEmail] = @p8, [NormalizedUserName] = @p9, [PasswordHash] = @p10, [PhoneNumber] = @p11, [PhoneNumberConfirmed] = @p12, [SecurityStamp] = @p13, [TwoFactorEnabled] = @p14, [UserName] = @p15
+OUTPUT 1
+WHERE [Id] = @p16 AND [ConcurrencyStamp] = @p17;
+2024-08-03 23:53:51.231 +02:00 [INF] Setting HTTP status code 200.
+2024-08-03 23:53:51.234 +02:00 [INF] Writing value of type 'String' as Json.
+2024-08-03 23:53:51.238 +02:00 [INF] Executed endpoint 'HTTP: POST /customRegister'
+2024-08-03 23:53:51.244 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5071/customRegister - 200 null application/json; charset=utf-8 1144.81ms

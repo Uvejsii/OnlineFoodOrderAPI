@@ -22,6 +22,7 @@ const UserRegister = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (!email || !password || !confirmPassword) {
       setError("Please fill in all fields.");
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -30,6 +31,7 @@ const UserRegister = () => {
       setError("Passwords do not match.");
     } else {
       setError("");
+
       fetch("http://localhost:5071/customRegister", {
         method: "POST",
         headers: {
@@ -42,18 +44,23 @@ const UserRegister = () => {
           role: "User",
         }),
       })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          if (data.ok) {
-            setError("Successful register.");
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok.");
+          }
+          return response.text();
+        })
+        .then((message) => {
+          console.log("Backend message:", message);
+          if (message.trim() === "User registered successfully.") {
+            setError("");
             navigate("/login");
           } else {
             setError("Error registering.");
           }
         })
         .catch((error) => {
-          console.error(error);
+          console.error("Fetch error:", error);
           setError("Error registering.");
         });
     }

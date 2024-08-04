@@ -68,42 +68,6 @@ using (var scope = app.Services.CreateScope())
 app.MapGet("/", () => "Hello World!");
 
 // ACCOUNT ENDPOINTS
-// app.MapPost("/register", async (UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, RegisterDto registerDto) =>
-// {
-//     if (string.IsNullOrEmpty(registerDto.Email) || string.IsNullOrEmpty(registerDto.Password) || string.IsNullOrEmpty(registerDto.ConfirmPassword))
-//     {
-//         return Results.BadRequest("Email, Password, and ConfirmPassword are required.");
-//     }
-
-//     if (registerDto.Password != registerDto.ConfirmPassword)
-//     {
-//         return Results.BadRequest("Password and ConfirmPassword do not match.");
-//     }
-
-//     var user = new ApplicationUser
-//     {
-//         UserName = registerDto.Email,
-//         Email = registerDto.Email
-//     };
-
-//     var result = await userManager.CreateAsync(user, registerDto.Password);
-//     if (!result.Succeeded)
-//     {
-//         return Results.BadRequest(result.Errors);
-//     }
-
-//     // Add the role assignment logic here
-//     if (!string.IsNullOrEmpty(registerDto.Role) && await roleManager.RoleExistsAsync(registerDto.Role))
-//     {
-//         await userManager.AddToRoleAsync(user, registerDto.Role);
-//     }
-//     else
-//     {
-//         await userManager.AddToRoleAsync(user, "User");
-//     }
-
-//     return Results.Ok("User registered successfully.");
-// });
 
 app.MapPost("/customRegister", async (UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, RegisterDto registerDto) =>
 {
@@ -138,7 +102,26 @@ app.MapPost("/customRegister", async (UserManager<ApplicationUser> userManager, 
         await userManager.AddToRoleAsync(user, "User");
     }
 
-    return Results.Ok("User registered successfully.");
+    return Results.Content("User registered successfully.", "text/plain");
+});
+
+app.MapPost("/customLogin", async (UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, LoginDto loginDto, ILogger<Program> logger) =>
+{
+    var user = await userManager.FindByEmailAsync(loginDto.Email);
+    if (user == null)
+    {
+        return Results.BadRequest("Invalid login attempt.");
+    }
+
+    var result = await signInManager.PasswordSignInAsync(user, loginDto.Password, loginDto.RememberMe, lockoutOnFailure: false);
+    if (!result.Succeeded)
+    {
+        return Results.BadRequest("Invalid login attempt.");
+    }
+
+    var roles = await userManager.GetRolesAsync(user);
+
+    return Results.Ok(new { Message = "Login successful", Roles = roles });
 });
 
 app.MapPost("/logout", async (SignInManager<ApplicationUser> signInManager) => {
@@ -148,7 +131,8 @@ app.MapPost("/logout", async (SignInManager<ApplicationUser> signInManager) => {
 
 app.MapGet("/pingauth", (ClaimsPrincipal user) => {
     var email = user.FindFirstValue(ClaimTypes.Email);
-    return Results.Json(new { Email = email });
+    var roles = user.FindAll(ClaimTypes.Role).Select(role => role.Value);
+    return Results.Json(new { Email = email, Roles = roles });
 }).RequireAuthorization();
 
 // FOOD ENDPOINTS

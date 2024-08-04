@@ -6,24 +6,15 @@ const UserContext = createContext({});
 function AuthorizeView(props) {
   const [authorized, setAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
-  const emptyUser = { email: "" };
-  const [user, setUser] = useState(emptyUser);
+  const [user, setUser] = useState({ email: "", roles: [] });
 
   useEffect(() => {
-    // let retryCount = 0;
-    // const maxRetries = 0;
-    const delay = 20;
-
-    function wait(delay) {
-      return new Promise((resolve) => setTimeout(resolve, delay));
-    }
-
     async function fetchWithRetry(url, options) {
       try {
         let response = await fetch(url, options);
         if (response.status === 200) {
           let json = await response.json();
-          setUser({ email: json.email });
+          setUser({ email: json.email, roles: json.roles });
           setAuthorized(true);
           return response;
         } else if (response.status === 401) {
@@ -33,6 +24,7 @@ function AuthorizeView(props) {
           throw new Error("" + response.status);
         }
       } catch (error) {
+        console.log(error.message);
         throw error;
       }
     }
@@ -53,6 +45,11 @@ function AuthorizeView(props) {
     return <p>Loading...</p>;
   } else {
     if (authorized && !loading) {
+      const isAdmin = user.roles.includes("Admin");
+      if (props.requiredRole === "Admin" && !isAdmin) {
+        return <Navigate to="/" />;
+      }
+
       return (
         <UserContext.Provider value={user}>
           {props.children}
@@ -69,6 +66,8 @@ export function AuthorizedUser(props) {
 
   if (props.value === "email") {
     return <>{user.email}</>;
+  } else if (props.value === "roles") {
+    return <>{user.roles.join(", ")}</>;
   } else {
     return null;
   }

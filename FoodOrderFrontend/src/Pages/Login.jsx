@@ -5,7 +5,6 @@ import { EnvelopeAtFill, LockFill } from "react-bootstrap-icons";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberme, setRememberme] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -13,12 +12,11 @@ const Login = () => {
     const { name, value } = e.target;
     if (name === "email") setEmail(value);
     if (name === "password") setPassword(value);
-    if (name === "rememberme") setRememberme(e.target.checked);
   };
 
   const handleRegisterClick = (e) => {
     e.preventDefault();
-    navigate("/register");
+    navigate("/userRegister");
   };
 
   const handleSubmit = async (e) => {
@@ -26,36 +24,40 @@ const Login = () => {
     if (!email || !password) {
       setError("Please fill in all fields.");
     } else {
-      // @Admin00
       setError("");
-      var loginurl = "";
-      if (rememberme == true) {
-        loginurl = "http://localhost:5071/login?useCookies=true";
-      } else {
-        loginurl = "http://localhost:5071/login?useSessionCookies=true";
-      }
-
-      await fetch(loginurl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-        credentials: "include",
-      })
-        .then((data) => {
-          if (data.ok) {
-            setError("Successful Login.");
-            navigate("/admin");
-          } else setError("Error Logging In.");
-        })
-        .catch((error) => {
-          console.error(error);
-          setError("Error Logging in.");
+      try {
+        const response = await fetch("http://localhost:5071/customLogin", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+          credentials: "include",
         });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok.");
+        }
+
+        const data = await response.json();
+
+        if (data.message === "Login successful") {
+          setError("");
+          if (data.roles.includes("Admin")) {
+            navigate("/admin");
+          } else {
+            navigate("/");
+          }
+        } else {
+          setError("Error Logging In.");
+        }
+      } catch (error) {
+        console.error(error);
+        setError("Error Logging in.");
+      }
     }
   };
 
@@ -109,17 +111,6 @@ const Login = () => {
                   {error && (
                     <p className="error text-light fw-semibold">{error}</p>
                   )}
-                  <div className="d-flex align-items-center gap-1 fw-semibold mb-3">
-                    <input
-                      type="checkbox"
-                      id="rememberme"
-                      name="rememberme"
-                      className="mt-1"
-                      checked={rememberme}
-                      onChange={handleChange}
-                    />
-                    <span className="text-light m-0">Remember Me</span>
-                  </div>
                   <div className="d-flex gap-5">
                     <button
                       type="submit"
