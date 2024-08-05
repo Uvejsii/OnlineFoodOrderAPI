@@ -11,6 +11,7 @@ export const addDrink = createAsyncThunk("addDrink", async (newDrink) => {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify(newDrink),
   });
   return response.json();
@@ -24,6 +25,7 @@ export const editDrink = createAsyncThunk("editDrink", async (drinkToEdit) => {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(drinkToEdit),
     }
   );
@@ -37,6 +39,7 @@ export const deleteDrink = createAsyncThunk(
       `http://localhost:5071/deleteDrink/${drinkToDelete.id}`,
       {
         method: "DELETE",
+        credentials: "include",
       }
     );
     return response.json();

@@ -12,6 +12,13 @@ import {
 } from "react-bootstrap-icons";
 import { motion } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+
+const NoLastOrder = styled.div`
+  margin: 220px 0;
+`;
 
 const OrderStatusPage = () => {
   const dispatch = useDispatch();
@@ -19,21 +26,60 @@ const OrderStatusPage = () => {
   const isLoading = useSelector((state) => state.orders.isLoading);
   const error = useSelector((state) => state.orders.error);
   const stepperRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getLastOrder());
   }, [dispatch]);
 
+  // useEffect(() => {
+  //   if (error === "NotFound") {
+  //     navigate("/login");
+  //   }
+  // }, [error, navigate]);
+
   if (isLoading) {
     return <p>Loading...</p>;
   }
 
-  if (error) {
-    return <p>Failed to fetch the last order. Please try again later.</p>;
+  if (error && error !== "NotFound") {
+    return (
+      <div className="container">
+        <NoLastOrder>
+          <h1 className="text-center">No last placed order found.</h1>
+          <h5 className="text-center">
+            Place an order to view your order status.
+          </h5>
+          <p className="text-center m-0">
+            <Link to="/login">Login</Link> to place orders.
+          </p>
+          <p className="text-center m-0">
+            Dont have an account, click <Link to="/userRegister">here</Link> to
+            register.
+          </p>
+        </NoLastOrder>
+      </div>
+    );
   }
 
   if (!lastOrder || !lastOrder.orderItems) {
-    return <p>No last order found.</p>;
+    return (
+      <div className="container">
+        <NoLastOrder>
+          <h1 className="text-center">No last placed order found.</h1>
+          <h5 className="text-center">
+            Place an order to view your order status.
+          </h5>
+          <p className="text-center m-0">
+            <Link to="/login">Login</Link> to place orders.
+          </p>
+          <p className="text-center m-0">
+            Dont have an account, click <Link to="/userRegister">here</Link> to
+            register.
+          </p>
+        </NoLastOrder>
+      </div>
+    );
   }
 
   const formatDate = (dateString) => {

@@ -24,14 +24,28 @@ const CartItems = () => {
   const subTotal = useSelector((state) => state.orders.subTotal);
   const orderTotal = useSelector((state) => state.orders.orderTotal);
   const isLoading = useSelector((state) => state.orders.isLoading);
-  const error = useSelector((state) => state.orders.error);
+
+  const [fetchCartItemsError, setFetchCartItemsError] = useState(null);
+  const [getOrderTotalError, setGetOrderTotalError] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchAllCartItems());
+    const fetchCartItems = async () => {
+      const resultAction = await dispatch(fetchAllCartItems());
+      if (fetchAllCartItems.rejected.match(resultAction)) {
+        setFetchCartItemsError(resultAction.payload);
+      }
+    };
+    fetchCartItems();
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(getOrderTotal());
+    const fetchOrderTotal = async () => {
+      const resultAction = await dispatch(getOrderTotal());
+      if (getOrderTotal.rejected.match(resultAction)) {
+        setGetOrderTotalError(resultAction.payload);
+      }
+    };
+    fetchOrderTotal();
   }, [dispatch, cartItems]);
 
   const handleChange = (e) => {
@@ -56,8 +70,15 @@ const CartItems = () => {
     return <p>Loading...</p>;
   }
 
-  if (error) {
+  if (fetchCartItemsError === "NotFound" || getOrderTotalError === "NotFound") {
     return <p>Failed to fetch cart items. Please refresh the page.</p>;
+  }
+
+  if (
+    fetchCartItemsError === "Unauthorized" ||
+    getOrderTotalError === "Unauthorized"
+  ) {
+    return <p>Unauthorized</p>;
   }
 
   return (

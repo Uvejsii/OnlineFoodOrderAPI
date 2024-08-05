@@ -1,26 +1,53 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { useDispatch } from "react-redux";
 
-export const addToCart = createAsyncThunk("addToCart", async (cartItem) => {
-  const response = await fetch("http://localhost:5071/addToCart", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(cartItem),
-    credentials: "include",
-  });
-  return response.json();
-});
+export const addToCart = createAsyncThunk(
+  "addToCart",
+  async (cartItem, { rejectWithValue }) => {
+    try {
+      const response = await fetch("http://localhost:5071/addToCart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cartItem),
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          return rejectWithValue("Unauthorized");
+        }
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 export const fetchAllCartItems = createAsyncThunk(
   "fetchAllCartItems",
-  async () => {
-    const response = await fetch("http://localhost:5071/getAllAddedItems", {
-      method: "GET",
-      credentials: "include",
-    });
-    return response.json();
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await fetch("http://localhost:5071/getAllAddedItems", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          return rejectWithValue("NotFound");
+        }
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
 );
 
@@ -52,13 +79,28 @@ export const updateCartItemQuantity = createAsyncThunk(
   }
 );
 
-export const getOrderTotal = createAsyncThunk("getOrderTotal", async () => {
-  const response = await fetch("http://localhost:5071/getOrderTotal", {
-    method: "GET",
-    credentials: "include",
-  });
-  return response.json();
-});
+export const getOrderTotal = createAsyncThunk(
+  "getOrderTotal",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await fetch("http://localhost:5071/getOrderTotal", {
+        method: "GET",
+        credentials: "include",
+      });
+      if (!response.ok) {
+        if (response.status === 404) {
+          return rejectWithValue("NotFound");
+        }
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 export const createOrder = createAsyncThunk(
   "createOrder",
@@ -82,17 +124,36 @@ export const createOrder = createAsyncThunk(
 export const getOrders = createAsyncThunk("getOrders", async () => {
   const response = await fetch("http://localhost:5071/getOrdersForAdmin", {
     method: "GET",
-  });
-  return response.json();
-});
-
-export const getLastOrder = createAsyncThunk("getLastOrder", async () => {
-  const response = await fetch("http://localhost:5071/getLastOrder", {
-    method: "GET",
     credentials: "include",
   });
   return response.json();
 });
+
+export const getLastOrder = createAsyncThunk(
+  "getLastOrder",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await fetch("http://localhost:5071/getLastOrder", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          return rejectWithValue("NotFound");
+        } else if (response.status === 401) {
+          return rejectWithValue("Unauthorized");
+        }
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 export const editOrderStatus = createAsyncThunk(
   "editOrderStatus",
@@ -130,8 +191,10 @@ export const ordersSlice = createSlice({
       state.isLoading = false;
       state.cartItems = action.payload;
     });
-    builder.addCase(addToCart.rejected, (state) => {
-      state.error = true;
+    builder.addCase(addToCart.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+      console.log(state.error);
     });
 
     // FETCH CART ITEMS
@@ -142,8 +205,16 @@ export const ordersSlice = createSlice({
       state.isLoading = false;
       state.cartItems = acton.payload;
     });
-    builder.addCase(fetchAllCartItems.rejected, (state) => {
+    builder.addCase(fetchAllCartItems.rejected, (state, action) => {
+      state.isLoading = false;
       state.error = true;
+      if (action.payload === "Unauthorized") {
+        state.error = "Unauthorized";
+      } else if (action.payload === "NotFound") {
+        state.error = "NotFound";
+      } else {
+        state.error = action.payload;
+      }
     });
 
     // REMOVE FROM CART
@@ -182,8 +253,9 @@ export const ordersSlice = createSlice({
         state.orderTotal = 0;
       }
     });
-    builder.addCase(getOrderTotal.rejected, (state) => {
-      state.error = true;
+    builder.addCase(getOrderTotal.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
     });
 
     // PLACE ORDER
@@ -221,10 +293,14 @@ export const ordersSlice = createSlice({
     builder.addCase(getLastOrder.fulfilled, (state, action) => {
       state.isLoading = false;
       state.lastOrder = action.payload;
-      // console.log(action.payload);
     });
-    builder.addCase(getLastOrder.rejected, (state) => {
-      state.error = true;
+    builder.addCase(getLastOrder.rejected, (state, action) => {
+      state.isLoading = false;
+      if (action.payload === "NotFound") {
+        state.error = "NotFound";
+      } else {
+        state.error = action.payload;
+      }
     });
 
     // EDIT ORDER STATUS

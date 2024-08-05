@@ -26,6 +26,12 @@ builder.Services.AddAuthorization(options =>
         policy => policy.RequireRole("Admin"));
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("UserOrAdminPolicy", policy =>
+        policy.RequireRole("Admin", "User"));
+});
+
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ModelsContext>();
@@ -150,7 +156,7 @@ app.MapPost("/postFood", async (ModelsContext context, Food food) => {
     context.Foods.Add(food);
     await context.SaveChangesAsync();
     return Results.Ok(await context.Foods.ToListAsync());
-}).RequireAuthorization("AdminPolicy");
+}).RequireAuthorization("RequireAdministratorRole");
 
 app.MapPut("/editFood/{id}", async (ModelsContext context, Food food, int id) => {
     var foundFood = await context.Foods.FindAsync(id);
@@ -171,7 +177,7 @@ app.MapPut("/editFood/{id}", async (ModelsContext context, Food food, int id) =>
     await context.SaveChangesAsync();
 
     return Results.Ok(await context.Foods.ToListAsync());
-});
+}).RequireAuthorization("RequireAdministratorRole");
 
 app.MapDelete("/deleteFood/{id}", async (ModelsContext context, int id) => {
     var foundFood = await context.Foods.FindAsync(id);
@@ -185,7 +191,7 @@ app.MapDelete("/deleteFood/{id}", async (ModelsContext context, int id) => {
     await context.SaveChangesAsync();
 
     return Results.Ok(await context.Foods.ToListAsync());
-});
+}).RequireAuthorization("RequireAdministratorRole");
 
 // DRINK ENDPOINTS
 app.MapGet("/getAllDrinkProducts", async (ModelsContext context) => {
@@ -202,7 +208,7 @@ app.MapPost("/postDrink", async (ModelsContext context, Drink drink) => {
     context.Drinks.Add(drink);
     await context.SaveChangesAsync();
     return Results.Ok(await context.Drinks.ToListAsync());
-});
+}).RequireAuthorization("RequireAdministratorRole");
 
 app.MapPut("/editDrink/{id}", async (ModelsContext context, Drink drink, int id) => {
     var foundDrink = await context.Drinks.FindAsync(id);
@@ -223,7 +229,7 @@ app.MapPut("/editDrink/{id}", async (ModelsContext context, Drink drink, int id)
     await context.SaveChangesAsync();
 
     return Results.Ok(await context.Drinks.ToListAsync());
-});
+}).RequireAuthorization("RequireAdministratorRole");
 
 app.MapDelete("/deleteDrink/{id}", async (ModelsContext context, int id) => {
     var foundDrink = await context.Drinks.FindAsync(id);
@@ -237,7 +243,7 @@ app.MapDelete("/deleteDrink/{id}", async (ModelsContext context, int id) => {
     await context.SaveChangesAsync();
 
     return Results.Ok(await context.Drinks.ToListAsync());
-});
+}).RequireAuthorization("RequireAdministratorRole");
 
 // ORDER ENDPOINTS
 app.MapPost("/addToCart", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext db) =>
@@ -296,7 +302,7 @@ app.MapPost("/addToCart", async (HttpContext httpContext, UserManager<Applicatio
     await db.SaveChangesAsync();
 
     return Results.Ok(new { Message = "Item added to cart successfully!" });
-}).RequireAuthorization();
+}).RequireAuthorization("UserOrAdminPolicy");
 
 app.MapGet("/getAllAddedItems", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext context) =>
 {
@@ -322,7 +328,7 @@ app.MapGet("/getAllAddedItems", async (HttpContext httpContext, UserManager<Appl
         .ToListAsync();
 
     return Results.Ok(cartItems);
-}).RequireAuthorization();
+}).RequireAuthorization("UserOrAdminPolicy");
 
 app.MapDelete("/removeCartItem/{id}/{productType}", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext context, int id, string productType) => {
     var user = await userManager.GetUserAsync(httpContext.User);
@@ -364,7 +370,7 @@ app.MapDelete("/removeCartItem/{id}/{productType}", async (HttpContext httpConte
         .ToListAsync();
 
     return Results.Ok(updatedCartItems);
-}).RequireAuthorization();
+}).RequireAuthorization("UserOrAdminPolicy");
 
 app.MapPut("/updateCartItemQuantity/{id}/{change}/{productType}", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext context, int id, int change, string productType) => {
     var user = await userManager.GetUserAsync(httpContext.User);
@@ -410,7 +416,7 @@ app.MapPut("/updateCartItemQuantity/{id}/{change}/{productType}", async (HttpCon
         .ToListAsync();
 
     return Results.Ok(updatedCartItems);
-}).RequireAuthorization();
+}).RequireAuthorization("UserOrAdminPolicy");
 
 app.MapGet("/getOrderTotal", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext context) => {
     var user = await userManager.GetUserAsync(httpContext.User);
@@ -430,7 +436,7 @@ app.MapGet("/getOrderTotal", async (HttpContext httpContext, UserManager<Applica
     var orderTotal = cart.CartItems.Sum(ci => ci.Price * ci.Quantity);
 
     return Results.Ok(new {OrderTotal = orderTotal});
-}).RequireAuthorization();
+}).RequireAuthorization("UserOrAdminPolicy");
 
 app.MapPost("/createOrder", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext context) =>
 {
@@ -511,30 +517,27 @@ app.MapPost("/createOrder", async (HttpContext httpContext, UserManager<Applicat
     };
 
     return Results.Ok(orderDto);
-}).RequireAuthorization();
+}).RequireAuthorization("UserOrAdminPolicy");
 
-
-
-
-app.MapPut("/order/update/{id}", async (ModelsContext context, int id, OrderStatus status) =>
-{
-    var order = await context.Orders.FindAsync(id);
-    if (order == null) return Results.NotFound();
+// app.MapPut("/order/update/{id}", async (ModelsContext context, int id, OrderStatus status) =>
+// {
+//     var order = await context.Orders.FindAsync(id);
+//     if (order == null) return Results.NotFound();
     
-    order.Status = status;
-    await context.SaveChangesAsync();
-    return Results.Ok(order);
-});
+//     order.Status = status;
+//     await context.SaveChangesAsync();
+//     return Results.Ok(order);
+// });
 
-app.MapGet("/order/user/{userId}", async (ModelsContext context, string userId) =>
-{
-    var orders = await context.Orders
-        .Include(o => o.OrderItems)
-        .Where(o => o.UserId == userId)
-        .ToListAsync();
+// app.MapGet("/order/user/{userId}", async (ModelsContext context, string userId) =>
+// {
+//     var orders = await context.Orders
+//         .Include(o => o.OrderItems)
+//         .Where(o => o.UserId == userId)
+//         .ToListAsync();
     
-    return Results.Ok(orders);
-});
+//     return Results.Ok(orders);
+// });
 
 app.MapGet("/getOrdersForAdmin", async (ModelsContext context, ILogger<Program> logger) =>
 {
@@ -573,7 +576,7 @@ app.MapGet("/getOrdersForAdmin", async (ModelsContext context, ILogger<Program> 
         logger.LogError(ex, "An error occurred while fetching orders.");
         return Results.Problem("An internal server error occurred.", statusCode: 500);
     }
-}).RequireAuthorization();
+}).RequireAuthorization("RequireAdministratorRole");
 
 app.MapGet("/getLastOrder", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, ModelsContext context) => 
 {
@@ -618,7 +621,7 @@ app.MapGet("/getLastOrder", async (HttpContext httpContext, UserManager<Applicat
     };
 
     return Results.Ok(userOrderDetailsDto);
-}).RequireAuthorization();
+}).RequireAuthorization("UserOrAdminPolicy");
 
 app.MapPut("/editOrderStatus/{orderId}/{newStatus}", async (ModelsContext context, int orderId, int newStatus) => {
     var order = await context.Orders
@@ -663,6 +666,6 @@ app.MapPut("/editOrderStatus/{orderId}/{newStatus}", async (ModelsContext contex
     }).ToList();
 
     return Results.Ok(orderDtos);
-}).RequireAuthorization();
+}).RequireAuthorization("UserOrAdminPolicy");
 
 app.Run();
