@@ -8,6 +8,7 @@ import { fetchAllCartItems } from "../features/orders/ordersSlice";
 const CartQuantity = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.orders.cartItems) || [];
+  const error = useSelector((state) => state.orders.error);
   const [cartQuantity, setCartQuantity] = useState(0);
   const navigate = useNavigate();
 

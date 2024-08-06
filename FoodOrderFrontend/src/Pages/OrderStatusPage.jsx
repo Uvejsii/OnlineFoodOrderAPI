@@ -26,43 +26,31 @@ const OrderStatusPage = () => {
   const isLoading = useSelector((state) => state.orders.isLoading);
   const error = useSelector((state) => state.orders.error);
   const stepperRef = useRef(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getLastOrder());
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   if (error === "NotFound") {
-  //     navigate("/login");
-  //   }
-  // }, [error, navigate]);
-
   if (isLoading) {
     return <p>Loading...</p>;
   }
 
-  if (error && error !== "NotFound") {
-    return (
-      <div className="container">
-        <NoLastOrder>
-          <h1 className="text-center">No last placed order found.</h1>
-          <h5 className="text-center">
-            Place an order to view your order status.
-          </h5>
-          <p className="text-center m-0">
-            <Link to="/login">Login</Link> to place orders.
-          </p>
-          <p className="text-center m-0">
-            Dont have an account, click <Link to="/userRegister">here</Link> to
-            register.
-          </p>
-        </NoLastOrder>
-      </div>
-    );
+  if (error === "Unauthorized") {
+    <div className="container">
+      <NoLastOrder>
+        <h1 className="text-center">Please login to place orders</h1>
+        <p className="text-center m-0">
+          <Link to="/login">Login</Link> to place orders.
+        </p>
+        <p className="text-center m-0">
+          Dont have an account, click <Link to="/userRegister">here</Link> to
+          register.
+        </p>
+      </NoLastOrder>
+    </div>;
   }
 
-  if (!lastOrder || !lastOrder.orderItems) {
+  if (!lastOrder || !lastOrder.orderItems || error === "NotFound") {
     return (
       <div className="container">
         <NoLastOrder>

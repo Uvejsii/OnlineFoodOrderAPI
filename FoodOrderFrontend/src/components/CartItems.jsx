@@ -11,6 +11,11 @@ import PlaceOrderForm from "./PlaceOrderForm";
 import PaymentSummary from "./PaymentSummary";
 import { motion } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
+import styled from "styled-components";
+
+const UnauthorizedContainer = styled.div`
+  margin: 220px 0;
+`;
 
 const CartItems = () => {
   const dispatch = useDispatch();
@@ -78,7 +83,18 @@ const CartItems = () => {
     fetchCartItemsError === "Unauthorized" ||
     getOrderTotalError === "Unauthorized"
   ) {
-    return <p>Unauthorized</p>;
+    return (
+      <UnauthorizedContainer className="container text-center mx-auto">
+        <h1>Please login to view your cart.</h1>
+        <p className="m-0">
+          Click <Link to="/login">here</Link> to login.
+        </p>
+        <p className="m-0">
+          Dont have an account, click <Link to="/userRegister">here</Link> to
+          register.
+        </p>
+      </UnauthorizedContainer>
+    );
   }
 
   return (
@@ -95,12 +111,12 @@ const CartItems = () => {
           ))}
         </motion.div>
       ) : (
-        <p>
+        <p className="mt-5 pt-5 text-center">
           No items in the cart, click <Link to="/orderStatus">here</Link> to
           view your last order status
         </p>
       )}
-      <div className="order d-flex flex-column flex-md-row gap-5 mt-5">
+      <div className="order d-flex flex-column flex-md-row gap-5 mt-5 pt-5">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

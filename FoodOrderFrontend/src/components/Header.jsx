@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import "../header.css";
 import { AuthorizedUser } from "./AuthorizeView";
 import CartQuantity from "./CartQuantity";
+import LoggedinUser from "./LoggedinUser";
 // import { logo } from "/public/food_order-logo.jpg";
 
 const Header = () => {
@@ -33,7 +34,10 @@ const Header = () => {
           Order Status
         </NavLink>
       </div>
-      <CartQuantity />
+      <div className="d-flex align-items-center gap-4">
+        <LoggedinUser />
+        <CartQuantity />
+      </div>
     </div>
   );
 };

@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { EnvelopeAtFill, LockFill } from "react-bootstrap-icons";
+import { toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { login } from "../features/users/usersSlice";
+import { useState } from "react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { user, error, status } = useSelector((state) => state.users);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,45 +24,45 @@ const Login = () => {
     navigate("/userRegister");
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!email || !password) {
-      setError("Please fill in all fields.");
+      toast.error("Please fill in all fields.");
     } else {
-      setError("");
-      try {
-        const response = await fetch("http://localhost:5071/customLogin", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
-          credentials: "include",
-        });
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok.");
-        }
-
-        const data = await response.json();
-
-        if (data.message === "Login successful") {
-          setError("");
+      dispatch(login({ email, password }))
+        .unwrap()
+        .then((data) => {
           if (data.roles.includes("Admin")) {
             navigate("/admin");
+            toast.success("Login successful as Admin!", {
+              position: "top-right",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              transition: Bounce,
+            });
           } else {
             navigate("/");
+            toast.success("Login successful as User!", {
+              position: "top-right",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              transition: Bounce,
+            });
           }
-        } else {
-          setError("Error Logging In.");
-        }
-      } catch (error) {
-        console.error(error);
-        setError("Error Logging in.");
-      }
+        })
+        .catch(() => {
+          toast.error("Error Logging in.");
+        });
     }
   };
 

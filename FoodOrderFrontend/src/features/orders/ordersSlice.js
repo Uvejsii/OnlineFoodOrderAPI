@@ -39,6 +39,8 @@ export const fetchAllCartItems = createAsyncThunk(
       if (!response.ok) {
         if (response.status === 404) {
           return rejectWithValue("NotFound");
+        } else if (response.status === 401) {
+          return rejectWithValue("Unauthorized");
         }
         throw new Error("Network response was not ok");
       }
@@ -90,6 +92,8 @@ export const getOrderTotal = createAsyncThunk(
       if (!response.ok) {
         if (response.status === 404) {
           return rejectWithValue("NotFound");
+        } else if (response.status === 401) {
+          return rejectWithValue("Unauthorized");
         }
         throw new Error("Network response was not ok");
       }
@@ -194,7 +198,6 @@ export const ordersSlice = createSlice({
     builder.addCase(addToCart.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
-      console.log(state.error);
     });
 
     // FETCH CART ITEMS
@@ -280,7 +283,6 @@ export const ordersSlice = createSlice({
     builder.addCase(getOrders.fulfilled, (state, action) => {
       state.isLoading = false;
       state.adminOrders = action.payload;
-      console.log(action.payload);
     });
     builder.addCase(getOrders.rejected, (state) => {
       state.error = true;
@@ -296,7 +298,10 @@ export const ordersSlice = createSlice({
     });
     builder.addCase(getLastOrder.rejected, (state, action) => {
       state.isLoading = false;
-      if (action.payload === "NotFound") {
+      state.error = true;
+      if (action.payload === "Unathorized") {
+        state.error = "Unathorized";
+      } else if (action.payload === "NotFound") {
         state.error = "NotFound";
       } else {
         state.error = action.payload;
