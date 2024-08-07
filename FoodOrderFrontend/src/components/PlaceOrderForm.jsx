@@ -1,3 +1,13 @@
+import styled from "styled-components";
+
+const PlaceOrderBtn = styled.button`
+  background-color: #ff6536;
+  color: white;
+  &:disabled {
+    background-color: #fc9373;
+  }
+`;
+
 const PlaceOrderForm = ({
   handleSubmit,
   orderFormData,
@@ -7,7 +17,7 @@ const PlaceOrderForm = ({
   return (
     <>
       <form
-        className="d-flex flex-column gap-3 shadow p-3 rounded-4"
+        className="d-flex flex-column gap-3 shadow p-3 rounded-4 border"
         onSubmit={handleSubmit}
       >
         <input
@@ -37,13 +47,13 @@ const PlaceOrderForm = ({
           value={orderFormData.phoneNumber}
           onChange={handleChange}
         />
-        <button
+        <PlaceOrderBtn
           type="submit"
-          className="btn btn-success fw-semibold w-100"
+          className="border-0 rounded py-2 fw-semibold w-100"
           disabled={orderTotal < 5 ? true : null}
         >
           Place Order
-        </button>
+        </PlaceOrderBtn>
       </form>
     </>
   );

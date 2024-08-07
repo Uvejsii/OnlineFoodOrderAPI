@@ -8,13 +8,17 @@ import { fetchAllCartItems } from "../features/orders/ordersSlice";
 const CartQuantity = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.orders.cartItems) || [];
-  const error = useSelector((state) => state.orders.error);
+  const user = useSelector((state) => state.users.user);
   const [cartQuantity, setCartQuantity] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(fetchAllCartItems());
-  }, []);
+    if (user) {
+      dispatch(fetchAllCartItems());
+    } else {
+      setCartQuantity(0);
+    }
+  }, [dispatch, user]);
 
   useEffect(() => {
     if (Array.isArray(cartItems)) {

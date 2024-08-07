@@ -187,6 +187,11 @@ const initialState = {
 export const ordersSlice = createSlice({
   name: "orders",
   initialState,
+  reducers: {
+    clearCart(state) {
+      state.cartItems = [];
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(addToCart.pending, (state) => {
       state.isLoading = true;
@@ -250,8 +255,8 @@ export const ordersSlice = createSlice({
     });
     builder.addCase(getOrderTotal.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.subTotal = action.payload.orderTotal;
-      state.orderTotal = action.payload.orderTotal + 1;
+      state.subTotal = action.payload.orderTotal - 1;
+      state.orderTotal = action.payload.orderTotal;
       if (state.subTotal == 0) {
         state.orderTotal = 0;
       }
@@ -322,4 +327,5 @@ export const ordersSlice = createSlice({
   },
 });
 
+export const { clearCart } = ordersSlice.actions;
 export default ordersSlice.reducer;

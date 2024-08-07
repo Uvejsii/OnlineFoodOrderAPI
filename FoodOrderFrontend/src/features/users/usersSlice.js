@@ -1,4 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { clearCart } from "../orders/ordersSlice";
+
+const saveUserToLocalStorage = (user) => {
+  localStorage.setItem("user", JSON.stringify(user));
+};
+
+const loadUserFromLocalStorage = () => {
+  const user = localStorage.getItem("user");
+  return user ? JSON.parse(user) : null;
+};
 
 export const login = createAsyncThunk(
   "login",
@@ -23,26 +33,36 @@ export const login = createAsyncThunk(
   }
 );
 
+export const userLogout = createAsyncThunk(
+  "userLogout",
+  async (_, { dispatch }) => {
+    await fetch("http://localhost:5071/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+    dispatch(clearCart());
+  }
+);
+
 const initialState = {
-  user: null,
+  user: loadUserFromLocalStorage(),
   status: "idle",
-  authorized: false,
+  authorized: !!loadUserFromLocalStorage(),
   loading: false,
   error: null,
+  isAdminOn: loadUserFromLocalStorage()
+    ? loadUserFromLocalStorage().roles.includes("Admin")
+    : false,
 };
 
 const usersSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-    logout(state) {
-      state.user = null;
-      state.authorized = false;
-      state.status = "idle";
-    },
     setUser(state, action) {
       state.user = action.payload;
       state.authorized = true;
+      saveUserToLocalStorage(action.payload);
     },
     setAuthorized(state, action) {
       state.authorized = action.payload;
@@ -60,14 +80,24 @@ const usersSlice = createSlice({
         state.status = "succeeded";
         state.user = action.payload;
         state.error = null;
+        if (action.payload.roles.includes("Admin")) {
+          state.isAdminOn = true;
+        }
+        saveUserToLocalStorage(action.payload);
       })
       .addCase(login.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });
+    builder.addCase(userLogout.fulfilled, (state) => {
+      state.user = null;
+      state.authorized = false;
+      state.status = "idle";
+      state.isAdminOn = false;
+      localStorage.removeItem("user");
+    });
   },
 });
 
-export const { logout, setUser, setAuthorized, setLoading } =
-  usersSlice.actions;
+export const { setUser, setAuthorized, setLoading } = usersSlice.actions;
 export default usersSlice.reducer;

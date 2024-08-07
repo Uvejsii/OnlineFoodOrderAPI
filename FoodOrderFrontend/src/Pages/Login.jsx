@@ -47,7 +47,7 @@ const Login = () => {
             });
           } else {
             navigate("/");
-            toast.success("Login successful as User!", {
+            toast.success("Login successful!", {
               position: "top-right",
               autoClose: 2000,
               hideProgressBar: false,

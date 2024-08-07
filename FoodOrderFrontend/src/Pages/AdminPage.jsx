@@ -8,8 +8,7 @@ import FoodListings from "../components/FoodListings";
 import { PlusCircleFill } from "react-bootstrap-icons";
 import SearchProducts from "../components/SearchProducts";
 import { useState } from "react";
-import AuthorizeView, { AuthorizedUser } from "../components/AuthorizeView";
-import LogOutButton from "../components/LogOutButton";
+import AuthorizeView from "../components/AuthorizeView";
 import styled from "styled-components";
 import "/src/admin.css";
 import ConfirmDeleteFoodModal from "../components/ConfirmDeleteFoodModal";
@@ -19,11 +18,7 @@ const Container = styled.div`
   background-color: #f5f5f5;
   color: #333333;
   padding: 20px;
-`;
-
-const SubHeader = styled.h5`
-  text-align: center;
-  color: #333333;
+  padding-top: 50px;
 `;
 
 const Button = styled.button`
@@ -52,15 +47,6 @@ const AdminPage = () => {
   return (
     <AuthorizeView requiredRole="Admin">
       <Container>
-        <SubHeader>
-          Welcome:{" "}
-          <span className="text-decoration-underline text-primary">
-            <AuthorizedUser value="email" />
-          </span>
-        </SubHeader>
-        <div className="d-flex justify-content-end mb-3">
-          <LogOutButton />
-        </div>
         <div className="admin-actions d-flex justify-content-between align-items-center mb-4">
           <div className="add-btns-wrapper d-flex gap-3">
             <Button

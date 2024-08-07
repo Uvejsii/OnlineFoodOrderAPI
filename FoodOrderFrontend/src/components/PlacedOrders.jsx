@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { editOrderStatus, getOrders } from "../features/orders/ordersSlice";
-import GoToAdminPageButton from "./GoToAdminPageButton";
 import { FilterMatchMode } from "primereact/api";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -12,6 +11,11 @@ import { Dropdown } from "primereact/dropdown";
 import { Tag } from "primereact/tag";
 import { Calendar } from "primereact/calendar";
 import { ThreeDotsVertical, CaretLeftFill } from "react-bootstrap-icons";
+import styled from "styled-components";
+
+const OrdersTable = styled.div`
+  margin: 65px 0px;
+`;
 
 const PlacedOrders = () => {
   const dispatch = useDispatch();
@@ -226,8 +230,7 @@ const PlacedOrders = () => {
 
   return (
     <>
-      <GoToAdminPageButton />
-      <div className="card">
+      <OrdersTable className="card">
         <DataTable
           value={orders}
           paginator
@@ -347,7 +350,7 @@ const PlacedOrders = () => {
             body={(rowData) => `€ ${rowData.totalAmount.toFixed(2)}`}
           />
         </DataTable>
-      </div>
+      </OrdersTable>
     </>
   );
 };

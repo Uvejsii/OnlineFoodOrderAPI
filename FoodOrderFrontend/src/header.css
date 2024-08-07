@@ -2,6 +2,12 @@
   background-color: #ff6536;
 }
 
+.logo {
+  width: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
 span {
   cursor: pointer;
 }
@@ -39,4 +45,19 @@ span {
 
 .cart-qty {
   color: #ff6536 !important;
+}
+
+.hamburger-menu {
+  display: none;
+}
+
+@media (max-width: 895px) {
+  .user-options-wrapper {
+    display: none;
+  }
+
+  .hamburger-menu {
+    display: block;
+    cursor: pointer;
+  }
 }

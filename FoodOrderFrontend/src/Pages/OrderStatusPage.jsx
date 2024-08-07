@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getLastOrder } from "../features/orders/ordersSlice";
-import GoToAdminPageButton from "../components/GoToAdminPageButton";
 import { Stepper } from "primereact/stepper";
 import { StepperPanel } from "primereact/stepperpanel";
 import {
@@ -12,12 +11,19 @@ import {
 } from "react-bootstrap-icons";
 import { motion } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 const NoLastOrder = styled.div`
   margin: 220px 0;
+`;
+
+const OrderInfo = styled.div`
+  // background-color: #faccbe;
+  border-radius: 15px;
+  width: 500px;
+  text-align: center;
+  margin: 0 auto;
 `;
 
 const OrderStatusPage = () => {
@@ -115,31 +121,34 @@ const OrderStatusPage = () => {
     lastOrder.status !== undefined ? getStepperIndex(lastOrder.status) : 0;
 
   return (
-    <div className="container my-4">
-      <GoToAdminPageButton />
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="mb-4 p-3 bg-light rounded shadow-sm"
-      >
-        <h6 className="text-secondary mb-1">Order Status:</h6>
-        <h4 className="text-success fw-bold">
-          {lastOrder.status !== undefined
-            ? orderStatusToText(lastOrder.status)
-            : "N/A"}
-        </h4>
-        <h6 className="text-secondary mb-1">Ordered On:</h6>
-        <h5>{lastOrder.orderDate ? formatDate(lastOrder.orderDate) : "N/A"}</h5>
-        <h6 className="text-secondary mb-1">City:</h6>
-        <h5>{lastOrder.city}</h5>
-        <h6 className="text-secondary mb-1">Location:</h6>
-        <h5>{lastOrder.location}</h5>
-        <h6 className="text-secondary mb-1">Total:</h6>
-        <h5>€ {lastOrder.totalAmount.toFixed(2)}</h5>
-      </motion.div>
+    <div className="container my-4 mt-5">
+      <OrderInfo>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="mb-4 p-3 rounded-4 bg-light shadow"
+        >
+          <h6 className="text-secondary mb-1">Order Status:</h6>
+          <h4 className="text-success fw-bold">
+            {lastOrder.status !== undefined
+              ? orderStatusToText(lastOrder.status)
+              : "N/A"}
+          </h4>
+          <h6 className="text-secondary mb-1">Ordered On:</h6>
+          <h5>
+            {lastOrder.orderDate ? formatDate(lastOrder.orderDate) : "N/A"}
+          </h5>
+          <h6 className="text-secondary mb-1">City:</h6>
+          <h5>{lastOrder.city}</h5>
+          <h6 className="text-secondary mb-1">Location:</h6>
+          <h5>{lastOrder.location}</h5>
+          <h6 className="text-secondary mb-1">Total:</h6>
+          <h5>€ {lastOrder.totalAmount.toFixed(2)}</h5>
+        </motion.div>
+      </OrderInfo>
       <div>
-        <h6 className="mb-3 ms-5 ps-4">Your order items:</h6>
+        <h6 className="mb-3 ms-5 ps-5">Your order items:</h6>
         <div className="d-flex justify-content-around">
           {lastOrder.orderItems.map((item, index) => (
             <motion.div
@@ -152,7 +161,7 @@ const OrderStatusPage = () => {
             >
               <img
                 src={item.imageUrl}
-                className="card-img-top"
+                className="card-img-top w-50 mx-auto"
                 alt={item.name}
               />
               <div className="card-body">

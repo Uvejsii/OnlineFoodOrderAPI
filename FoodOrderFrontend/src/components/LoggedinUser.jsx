@@ -1,9 +1,9 @@
-import { ChevronDown, Person } from "react-bootstrap-icons";
+import { ChevronDown, ChevronUp, Person } from "react-bootstrap-icons";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { logout } from "../features/users/usersSlice";
+import { userLogout } from "../features/users/usersSlice";
 
 const Account = styled.p`
   cursor: pointer;
@@ -28,9 +28,12 @@ const AccOptions = styled.div`
     background-color: #fc9373;
     cursor: pointer;
   }
+  @media (max-width: 895px) {
+    margin-top: -25px;
+  }
 `;
 
-const LoggedinUser = () => {
+const LoggedinUser = ({ toggleHamburgerMenu }) => {
   const { user } = useSelector((state) => state.users);
   const [showAccOptions, setShowAccOptions] = useState(false);
   const navigate = useNavigate();
@@ -48,9 +51,10 @@ const LoggedinUser = () => {
     })
       .then((data) => {
         if (data.ok) {
-          dispatch(logout());
+          dispatch(userLogout());
           navigate("/login");
           setShowAccOptions(false);
+          toggleHamburgerMenu();
         }
       })
       .catch((error) => {
@@ -61,7 +65,7 @@ const LoggedinUser = () => {
   if (!user) {
     return (
       <Link to="/login" className="text-light">
-        <Person className="fs-3" />
+        <Person className="fs-3" onClick={toggleHamburgerMenu} />
       </Link>
     );
   }
@@ -70,7 +74,11 @@ const LoggedinUser = () => {
     <div>
       <Account onClick={() => setShowAccOptions(!showAccOptions)}>
         {user.email}
-        <ChevronDown className="ms-2" />
+        {showAccOptions ? (
+          <ChevronUp className="ms-2" />
+        ) : (
+          <ChevronDown className="ms-2" />
+        )}
       </Account>
       {showAccOptions && (
         <AccOptions

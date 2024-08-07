@@ -24,7 +24,6 @@ const HomePage = () => {
       <HomeContainer>
         <div className="container">
           <div className="d-flex justify-content-between">
-            <GoToAdminPageButton />
             <SearchProducts setFilteredProducts={setFilteredProducts} />
             <FilterProducts />
           </div>

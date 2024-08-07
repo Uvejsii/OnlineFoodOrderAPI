@@ -433,7 +433,7 @@ app.MapGet("/getOrderTotal", async (HttpContext httpContext, UserManager<Applica
         return Results.Unauthorized();
     }
 
-    var orderTotal = cart.CartItems.Sum(ci => ci.Price * ci.Quantity);
+    var orderTotal = cart.CartItems.Sum(ci => ci.Price * ci.Quantity) + 1;
 
     return Results.Ok(new {OrderTotal = orderTotal});
 }).RequireAuthorization("UserOrAdminPolicy");
@@ -519,35 +519,15 @@ app.MapPost("/createOrder", async (HttpContext httpContext, UserManager<Applicat
     return Results.Ok(orderDto);
 }).RequireAuthorization("UserOrAdminPolicy");
 
-// app.MapPut("/order/update/{id}", async (ModelsContext context, int id, OrderStatus status) =>
-// {
-//     var order = await context.Orders.FindAsync(id);
-//     if (order == null) return Results.NotFound();
-    
-//     order.Status = status;
-//     await context.SaveChangesAsync();
-//     return Results.Ok(order);
-// });
-
-// app.MapGet("/order/user/{userId}", async (ModelsContext context, string userId) =>
-// {
-//     var orders = await context.Orders
-//         .Include(o => o.OrderItems)
-//         .Where(o => o.UserId == userId)
-//         .ToListAsync();
-    
-//     return Results.Ok(orders);
-// });
-
 app.MapGet("/getOrdersForAdmin", async (ModelsContext context, ILogger<Program> logger) =>
 {
     try
     {
         var orders = await context.Orders
             .Include(o => o.OrderItems)
+            .OrderByDescending(o => o.Id)
             .ToListAsync();
 
-        // Map to DTOs
         var orderDtos = orders.Select(o => new OrderDto
         {
             Id = o.Id,

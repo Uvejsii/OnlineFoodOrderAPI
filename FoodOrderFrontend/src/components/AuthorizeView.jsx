@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Person } from "react-bootstrap-icons";
 import { Link, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser, logout, setLoading } from "../features/users/usersSlice";
+import { setUser, userLogout, setLoading } from "../features/users/usersSlice";
 
 function AuthorizeView(props) {
   const dispatch = useDispatch();
@@ -17,7 +17,7 @@ function AuthorizeView(props) {
           let json = await response.json();
           dispatch(setUser({ email: json.email, roles: json.roles }));
         } else if (response.status === 401) {
-          dispatch(logout());
+          dispatch(userLogout());
         } else {
           throw new Error("" + response.status);
         }

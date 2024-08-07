@@ -2,8 +2,6 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getClickedFood } from "../features/products/food/foodSlice";
 import { useParams } from "react-router-dom";
-import GoToAdminPageButton from "../components/GoToAdminPageButton";
-import GoToHomePageButton from "../components/GoToHomePageButton";
 import "/src/productDetail.css";
 import AddToCartButton from "../components/AddToCartButton";
 
@@ -59,10 +57,6 @@ const FoodDetail = () => {
               <p>{food.description}</p>
             </div>
             <AddToCartButton product={food} />
-          </div>
-          <div className="navigate-btns d-flex gap-5 mt-4">
-            <GoToAdminPageButton />
-            <GoToHomePageButton />
           </div>
         </section>
       </div>
