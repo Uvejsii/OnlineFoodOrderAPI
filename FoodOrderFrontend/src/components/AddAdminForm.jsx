@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { EnvelopeAtFill, LockFill } from "react-bootstrap-icons";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddAdminForm = () => {
   const [email, setEmail] = useState("");
@@ -59,6 +61,20 @@ const AddAdminForm = () => {
           console.log("Backend message:", message);
           if (message.trim() === "Admin registered successfully.") {
             setError("");
+            toast.success("New Admin Registered Successfully!", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              transition: Bounce,
+            });
+            setEmail("");
+            setPassword("");
+            setConfirmPassword("");
           } else {
             setError("Error registering.");
           }
@@ -131,7 +147,7 @@ const AddAdminForm = () => {
               {error && <p className="error text-danger">{error}</p>}
               <button
                 className="btn btn-primary w-100 mt-4 fw-bold"
-                data-bs-dismiss={error ? false : true}
+                data-bs-dismiss={error ? null : "modal"}
               >
                 CONFIRM ADD
               </button>

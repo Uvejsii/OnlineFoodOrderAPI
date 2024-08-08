@@ -663,6 +663,7 @@ app.MapPut("/editOrderStatus/{orderId}/{newStatus}", async (ModelsContext contex
 
     var orders = await context.Orders
         .Include(o => o.OrderItems)
+        .OrderByDescending(o => o.Id)
         .ToListAsync();
 
     var orderDtos = orders.Select(o => new OrderDto

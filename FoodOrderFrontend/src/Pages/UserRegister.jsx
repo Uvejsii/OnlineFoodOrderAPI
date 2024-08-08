@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { EnvelopeAtFill, LockFill } from "react-bootstrap-icons";
+import { toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UserRegister = () => {
   const [email, setEmail] = useState("");
@@ -55,6 +57,17 @@ const UserRegister = () => {
           if (message.trim() === "User registered successfully.") {
             setError("");
             navigate("/login");
+            toast.success("You Have Successfully Registered!", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              transition: Bounce,
+            });
           } else {
             setError("Error registering.");
           }
@@ -128,6 +141,9 @@ const UserRegister = () => {
                       onChange={handleChange}
                     />
                   </div>
+                  {error && (
+                    <p className="error text-warning fw-bold">{error}</p>
+                  )}
                   <div className="d-flex gap-5">
                     <button
                       type="submit"
@@ -147,7 +163,6 @@ const UserRegister = () => {
             </div>
           </div>
         </div>
-        {error && <p className="error">{error}</p>}
       </div>
     </section>
   );
