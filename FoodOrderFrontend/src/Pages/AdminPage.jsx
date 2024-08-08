@@ -13,6 +13,7 @@ import styled from "styled-components";
 import "/src/admin.css";
 import ConfirmDeleteFoodModal from "../components/ConfirmDeleteFoodModal";
 import ConfirmDeleteDrinkModal from "../components/ConfirmDeleteDrinkModal";
+import AddAdminForm from "../components/AddAdminForm";
 
 const Container = styled.div`
   background-color: #f5f5f5;
@@ -47,21 +48,34 @@ const AdminPage = () => {
   return (
     <AuthorizeView requiredRole="Admin">
       <Container>
-        <div className="admin-actions d-flex justify-content-between align-items-center mb-4">
-          <div className="add-btns-wrapper d-flex gap-3">
-            <Button
-              $primary
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-            >
-              Add Food <PlusCircleFill />
-            </Button>
-            <Button data-bs-toggle="modal" data-bs-target="#addDrinkModal">
-              Add Drink <PlusCircleFill />
-            </Button>
+        <div className="admin-actions mb-4">
+          <div className="d-flex justify-content-between">
+            <SearchProducts setFilteredProducts={setFilteredProducts} />
+            <FilterProducts />
           </div>
-          <SearchProducts setFilteredProducts={setFilteredProducts} />
-          <FilterProducts />
+          <div className="add-btns-wrapper d-flex justify-content-between gap-3">
+            <div className="add-food-btns d-flex gap-3">
+              <Button
+                $primary
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+              >
+                Add Food <PlusCircleFill />
+              </Button>
+              <Button data-bs-toggle="modal" data-bs-target="#addDrinkModal">
+                Add Drink <PlusCircleFill />
+              </Button>
+            </div>
+            <div className="d-flex">
+              <button
+                data-bs-toggle="modal"
+                data-bs-target="#addAdminModal"
+                className="btn btn-primary fw-bold d-flex align-items-center gap-2"
+              >
+                Add Admin <PlusCircleFill />
+              </button>
+            </div>
+          </div>
         </div>
         <AddFoodForm />
         <EditFoodForm />
@@ -69,6 +83,7 @@ const AdminPage = () => {
         <EditDrinkForm />
         <ConfirmDeleteFoodModal />
         <ConfirmDeleteDrinkModal />
+        <AddAdminForm />
         <div className="products-wrapper row row-cols-1 row-cols-xl-3 row-cols-lg-3 row-cols-md-2 g-4">
           <FoodListings foods={filteredProducts.foods} />
           <DrinkListings drinks={filteredProducts.drinks} />

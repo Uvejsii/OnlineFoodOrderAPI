@@ -111,6 +111,47 @@ app.MapPost("/customRegister", async (UserManager<ApplicationUser> userManager, 
     return Results.Content("User registered successfully.", "text/plain");
 });
 
+app.MapPost("/registerAdmin", async (HttpContext httpContext, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, RegisterDto registerDto) =>
+{
+    if (string.IsNullOrEmpty(registerDto.Email) || string.IsNullOrEmpty(registerDto.Password) || string.IsNullOrEmpty(registerDto.ConfirmPassword))
+    {
+        return Results.BadRequest("Email, Password, and ConfirmPassword are required.");
+    }
+
+    if (registerDto.Password != registerDto.ConfirmPassword)
+    {
+        return Results.BadRequest("Password and ConfirmPassword do not match.");
+    }
+
+    var currentUser = await userManager.GetUserAsync(httpContext.User);
+    if (currentUser == null || !await userManager.IsInRoleAsync(currentUser, "Admin"))
+    {
+        return Results.Forbid();
+    }
+
+    var user = new ApplicationUser
+    {
+        UserName = registerDto.Email,
+        Email = registerDto.Email
+    };
+
+    var result = await userManager.CreateAsync(user, registerDto.Password);
+    if (!result.Succeeded)
+    {
+        return Results.BadRequest(result.Errors);
+    }
+
+    if (!await roleManager.RoleExistsAsync("Admin"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("Admin"));
+    }
+
+    await userManager.AddToRoleAsync(user, "Admin");
+
+    return Results.Content("Admin registered successfully.", "text/plain");
+});
+
+
 app.MapPost("/customLogin", async (UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, LoginDto loginDto, ILogger<Program> logger) =>
 {
     var user = await userManager.FindByEmailAsync(loginDto.Email);
